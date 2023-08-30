@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#answer {
+    padding: 5px;
+    margin: 10px;
+    width: 150px;
+    text-align: center;
+}
+
+#submit {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#submit:hover {
+    background-color: #0056b3;
+}
+
+#result {
+    margin-top: 20px;
+}
+
+        </style>
+    <title>Math Quiz Game | Justin Coding Projects</title>
+</head>
+<body>
+    <header>
+        <h1>Math Quiz Game</h1>
+    </header>
+    <main>
+        <div id="question"></div>
+        <input type="number" id="answer" placeholder="Enter your answer">
+        <button id="submit">Submit</button>
+        <div id="result"></div>
+    </main>
+    <script>
+        const questionElement = document.getElementById("question");
+const answerElement = document.getElementById("answer");
+const submitButton = document.getElementById("submit");
+const resultElement = document.getElementById("result");
+
+answerElement.addEventListener("keypress", (e) => {if (e.keyCode == 13) checkAnswer()});
+submitButton.addEventListener("click", checkAnswer);
+
+function generateQuestion() {
+    const num1 = Math.floor(Math.random() * 10);
+    const num2 = Math.floor(Math.random() * 10);
+    return `${num1} + ${num2}`;
+}
+
+function checkAnswer() {
+    const userAnswer = parseInt(answerElement.value);
+    const [num1, num2] = questionElement.textContent.split("+").map(str => parseInt(str));
+    const correctAnswer = num1 + num2;
+
+    if (userAnswer === correctAnswer) {
+        resultElement.textContent = "Correct!";
+    } else {
+        resultElement.textContent = "Incorrect. Try again.";
+    }
+
+    // Generate a new question after checking the answer
+    questionElement.textContent = generateQuestion();
+    answerElement.value = "";
+}
+
+// Initial question generation
+questionElement.textContent = generateQuestion();
+    </script>
+</body>
+</html>
