@@ -90,7 +90,7 @@
       countdownTimer.innerHTML = "";
       countdownTimer.style.display = "block";
 
-      const targetTime = getNextScheduleTime();
+      const targetTime = getNextScheduleTime(currentScheduleIndex);
       const intervalDuration = targetTime - new Date().getTime();
 
       if (intervalDuration > 0) {
@@ -99,7 +99,7 @@
     }
   }
 
-  function getNextScheduleTime() {
+  function getNextScheduleTime(index) {
     const now = new Date();
     const currentTime = now.getTime();
 
@@ -114,22 +114,12 @@
       })
       .sort((a, b) => a - b);
 
-    const nearestTime = sortedTimes.find(time => time >= now);
-    currentScheduleIndex = scheduleTimes.findIndex(time => {
-      const [hours, minutes] = time.split(":");
-      const targetTime = new Date(nearestTime);
-      targetTime.setHours(hours);
-      targetTime.setMinutes(minutes);
-      targetTime.setSeconds(0);
-      return targetTime.getTime() === nearestTime.getTime();
-    });
-
-    return nearestTime;
+    return sortedTimes[index];
   }
 
   function updateCountdown() {
     const currentTime = new Date().getTime();
-    const targetTime = getNextScheduleTime();
+    const targetTime = getNextScheduleTime(currentScheduleIndex);
     const timeDifference = targetTime - currentTime;
 
     if (timeDifference <= 0) {
