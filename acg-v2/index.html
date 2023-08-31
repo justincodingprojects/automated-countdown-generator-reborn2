@@ -1,1 +1,116 @@
 a
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        .countdown-container {
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .schedule-input {
+            margin-bottom: 1rem;
+        }
+
+        .countdown-timer {
+            display: none;
+        }
+
+        #countdown {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+    <title>ACG v 2.0 | Justin Coding Projects</title>
+</head>
+
+<body>
+    <header>
+        <h1>ACG v 2.0</h1>
+    </header>
+    <main>
+        <div class="countdown-container">
+            <h2>Enter Schedule</h2>
+            <div class="schedule-input">
+                <label for="schedule">Enter schedule times:</label>
+                <input type="text" id="schedule" placeholder="e.g. 10:00, 14:30, 18:45">
+                <button id="start-countdown">Start Countdown</button>
+            </div>
+            <div class="countdown-timer">
+                <h3>Countdown:</h3>
+                <div id="countdown"></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const startCountdownButton = document.getElementById("start-countdown");
+            const countdownTimerDiv = document.getElementsByClassName("countdown-timer")[0];
+            const countdownTimer = document.getElementById("countdown");
+            const scheduleInput = document.getElementById("schedule");
+
+            startCountdownButton.addEventListener("click", function () {
+                const scheduleTimes = scheduleInput.value.split(",").map(time => time.trim());
+
+                if (scheduleTimes.length > 0) {
+                    countdownTimer.innerHTML = "";
+                    countdownTimerDiv.style.display = "block";
+                    countdownTimer.style.display = "block";
+
+                    scheduleTimes.forEach(time => {
+                        const [hours, minutes] = time.split(":");
+                        const targetTime = new Date();
+                        targetTime.setHours(hours);
+                        targetTime.setMinutes(minutes);
+                        targetTime.setSeconds(0);
+
+                        const intervalId = setInterval(updateCountdown, 1000);
+
+                        function updateCountdown() {
+                            const currentTime = new Date().getTime();
+                            const timeDifference = targetTime - currentTime;
+
+                            if (timeDifference <= 0) {
+                                clearInterval(intervalId);
+                                countdownTimer.innerHTML += `<p>${time} - Time's up!</p>`;
+                            } else {
+                                const hoursLeft = Math.floor(timeDifference / (1000 * 60 * 60));
+                                const minutesLeft = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                                const secondsLeft = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                                countdownTimer.innerHTML = `<p>${time} - ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s</p>`;
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
