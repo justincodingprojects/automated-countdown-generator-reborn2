@@ -69,46 +69,82 @@
     </main>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const startCountdownButton = document.getElementById("start-countdown");
-            const countdownTimerDiv = document.getElementsByClassName("countdown-timer")[0];
-            const countdownTimer = document.getElementById("countdown");
-            const scheduleInput = document.getElementById("schedule");
+  const startCountdownButton = document.getElementById("start-countdown");
+  const countdownTimer = document.getElementById("countdown");
+  const scheduleInput = document.getElementById("schedule");
 
-            startCountdownButton.addEventListener("click", function () {
-                const scheduleTimes = scheduleInput.value.split(",").map(time => time.trim());
+  let scheduleTimes = [];
+  let currentScheduleIndex = 0;
+  let intervalId;
 
-                if (scheduleTimes.length > 0) {
-                    countdownTimer.innerHTML = "";
-                    countdownTimerDiv.style.display = "block";
-                    countdownTimer.style.display = "block";
+  startCountdownButton.addEventListener("click", function () {
+    scheduleTimes = scheduleInput.value.split(",").map(time => time.trim());
 
-                    scheduleTimes.forEach(time => {
-                        const [hours, minutes] = time.split(":");
-                        const targetTime = new Date();
-                        targetTime.setHours(hours);
-                        targetTime.setMinutes(minutes);
-                        targetTime.setSeconds(0);
+    if (scheduleTimes.length > 0) {
+      startNextCountdown();
+    }
+  });
 
-                        const intervalId = setInterval(updateCountdown, 1000);
+  function startNextCountdown() {
+    if (currentScheduleIndex < scheduleTimes.length) {
+      countdownTimer.innerHTML = "";
+      countdownTimer.style.display = "block";
 
-                        function updateCountdown() {
-                            const currentTime = new Date().getTime();
-                            const timeDifference = targetTime - currentTime;
+      const targetTime = getNextScheduleTime();
+      const intervalDuration = targetTime - new Date().getTime();
 
-                            if (timeDifference <= 0) {
-                                clearInterval(intervalId);
-                                countdownTimer.innerHTML += `<p>${time} - Time's up!</p>`;
-                            } else {
-                                const hoursLeft = Math.floor(timeDifference / (1000 * 60 * 60));
-                                const minutesLeft = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                                const secondsLeft = Math.floor((timeDifference % (1000 * 60)) / 1000);
-                                countdownTimer.innerHTML = `<p>${time} - ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s</p>`;
-                            }
-                        }
-                    });
-                }
-            });
-        });
+      if (intervalDuration > 0) {
+        intervalId = setInterval(updateCountdown, 1000);
+      }
+    }
+  }
+
+  function getNextScheduleTime() {
+    const now = new Date();
+    const currentTime = now.getTime();
+
+    const sortedTimes = scheduleTimes
+      .map(time => {
+        const [hours, minutes] = time.split(":");
+        const targetTime = new Date();
+        targetTime.setHours(hours);
+        targetTime.setMinutes(minutes);
+        targetTime.setSeconds(0);
+        return targetTime;
+      })
+      .sort((a, b) => a - b);
+
+    const nearestTime = sortedTimes.find(time => time >= now);
+    currentScheduleIndex = scheduleTimes.findIndex(time => {
+      const [hours, minutes] = time.split(":");
+      const targetTime = new Date(nearestTime);
+      targetTime.setHours(hours);
+      targetTime.setMinutes(minutes);
+      targetTime.setSeconds(0);
+      return targetTime.getTime() === nearestTime.getTime();
+    });
+
+    return nearestTime;
+  }
+
+  function updateCountdown() {
+    const currentTime = new Date().getTime();
+    const targetTime = getNextScheduleTime();
+    const timeDifference = targetTime - currentTime;
+
+    if (timeDifference <= 0) {
+      clearInterval(intervalId);
+      countdownTimer.innerHTML += `<p>${scheduleTimes[currentScheduleIndex]} - Time's up!</p>`;
+      currentScheduleIndex++;
+      startNextCountdown();
+    } else {
+      const hoursLeft = Math.floor(timeDifference / (1000 * 60 * 60));
+      const minutesLeft = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const secondsLeft = Math.floor((timeDifference % (1000 * 60)) / 1000);
+      countdownTimer.innerHTML = `<p>${scheduleTimes[currentScheduleIndex]} - ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s</p>`;
+    }
+  }
+});
     </script>
 </body>
 
