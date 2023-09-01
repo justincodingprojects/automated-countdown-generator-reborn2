@@ -9,7 +9,7 @@ Date.prototype.formatTime = function () {
 };
 
 function calculateCountdown(startTime) {
-    const now = Date.now();
+    const now = ServerDate.now();
     return startTime - now;
 }
 
