@@ -64,11 +64,6 @@ if ("wakeLock" in navigator) {
     requestWakeLock();
 }
 
-new Egg("esc", function () {
-    window.top.document.getElementById("iframeContainer").style.display = "none";
-    window.top.document.getElementById("contentIframe").srcdoc = "";
-}).listen();
-
 let zoomed = false;
 let locked = false;
 new Egg("m", function () {
