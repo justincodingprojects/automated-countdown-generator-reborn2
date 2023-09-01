@@ -113,21 +113,17 @@
                         schedules.push({ block, start_date });
                     }
                 });
-                const openIframeButton = document.getElementById("openIframe");
                 const iframeContainer = document.getElementById("iframeContainer");
                 const contentIframe = document.getElementById("contentIframe");
                 const iframeClose = document.getElementById("iframeClose");
-
-                openIframeButton.addEventListener("click", () => {
-                    iframeContainer.style.display = "flex";
-                    fetch('./countdown.html')
-                        .then(response => {
-                            return response.text();
-                        })
-                        .then(data => {
-                            contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(schedules));
-                        })
-                });
+                iframeContainer.style.display = "flex";
+                fetch('./countdown.html')
+                    .then(response => {
+                        return response.text();
+                    })
+                    .then(data => {
+                        contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(schedules));
+                })
 
                 iframeClose.addEventListener("click", () => {
                     iframeContainer.style.display = "none";
