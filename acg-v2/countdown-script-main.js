@@ -8,6 +8,14 @@ Date.prototype.formatTime = function () {
     return `${this.getHours()}:${this.getMinutes()}:${this.getSeconds()}`;
 };
 
+Date.prototype.formatDate = function () {
+    return `${this.getMonth() + 1}/${this.getDate()}/${this.getFullYear()}`;
+};
+
+Date.prototype.formatTime = function () {
+    return `${this.getHours()}:${this.getMinutes()}:${this.getSeconds()}`;
+};
+
 function calculateCountdown(startTime) {
     const now = Date.now();
     return startTime - now;
@@ -19,13 +27,17 @@ function formatDuration(milliseconds) {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    return `${addTrailingZero(days)}d ${addTrailingZero(hours % 24)}h ${addTrailingZero(minutes % 60)}m ${addTrailingZero(seconds % 60)}s`;
+    return `${days}d ${hours % 24}h ${minutes % 60}m ${seconds % 60}s`;
 }
 
 function updateCountdownDisplay(block, countdown) {
-    document.getElementById("title").innerHTML = block;
-    document.title = `${block} - Auto. Countdown Generator | Justin Coding Projects`;
-    document.getElementById("demo").innerHTML = countdown;
+    document.getElementById(`title-${block}`).innerHTML = block;
+    document.title = `${countdown} - Auto. Countdown Generator | Justin Coding Projects`;
+    document.getElementById(`demo-${block}`).innerHTML = countdown;
+    
+    if (countdown === "Countdown Ended") {
+        clearInterval(countdownIntervals[block]);
+    }
 }
 
 function startCountdown(startTime, block) {
@@ -38,20 +50,15 @@ function startCountdown(startTime, block) {
 
 const countdownIntervals = {};
 
-blockData.forEach((blockItem) => {
-    const blockStartTime = new Date(blockItem.start_date).getTime();
-    const blockName = blockItem.block;
-    
-    countdownIntervals[blockName] = startCountdown(blockStartTime, blockName);
-});
-
 function addTrailingZero(number) {
     return (number < 10 ? "0" : "") + number;
 }
 
 blockData.forEach((blockItem) => {
     const blockStartTime = new Date(blockItem.start_date).getTime();
-    currentBlock = { block: blockItem.block, interval: startCountdown(blockStartTime, blockItem.block) };
+    const blockName = blockItem.block;
+    
+    countdownIntervals[blockName] = startCountdown(blockStartTime, blockName);
 });
 
 let wakeLock = null;
