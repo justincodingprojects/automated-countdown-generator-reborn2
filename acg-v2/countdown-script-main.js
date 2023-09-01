@@ -41,6 +41,7 @@ function updateCountdown() {
         }
 
         // Update countdown display
+        document.getElementById("title").innerText = blocks[currentBlockIndex].block;
         document.getElementById("demo").innerText = formatDuration(timeRemaining);
     }
 }
