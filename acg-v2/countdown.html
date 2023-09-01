@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/egg.js/1.0/egg.min.js" async></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        async></script>
+    <script>
+        // BLOCK DATA
+        const blockData = "" // BLOCK_DATA
+    </script>
+    <script id="ServerDate" src="./ServerDate.js"></script>
+    <script>
+        // BANNER SCRIPT
+        var count = 0
+        onMaintenance = {
+            aInternal: 10,
+            aListener: function (val) { },
+            set isOn(val) {
+                this.aInternal = val;
+                this.aListener(val);
+            },
+            get isOn() {
+                return this.aInternal;
+            },
+            registerListener: function (listener) {
+                this.aListener = listener;
+            }
+        }
+
+        onMaintenance.registerListener(function (val) {
+            setMaintenanceBanner(onMaintenance.isOn)
+        });
+
+        function setMaintenanceBanner(bool) {
+            if (bool == true) {
+                if (document.getElementsByClassName("topnav")[0] == undefined) {
+                    setTimeout(function () {
+                        var div = document.createElement("div")
+                        div.setAttribute("class", "topnav")
+                        document.body.appendChild(div)
+                        var a = document.createElement("a")
+                        a.setAttribute("id", "mainbanner")
+                        a.setAttribute("class", "active")
+                        document.getElementsByClassName("topnav")[0].appendChild(a)
+                        //fetch("https://raw.githubusercontent.com/justincodingprojects/automated-countdown-generator/main/acgconfig/Maintenance-Banner-Text/maintenancebannertext.txt?t=" + Math.random(), { cache: "no-store" }).then((r) => r.text().then((t) => document.getElementById("mainbanner").innerHTML = t));
+                        document.getElementById("mainbanner").innerHTML = "This countdown has been reborn. You're welcome!";
+                    }, 50)
+                }
+            } else if (bool == false) {
+                if (document.getElementsByClassName("topnav")[0] !== undefined) {
+                    document.body.removeChild(document.getElementsByClassName("topnav")[0])
+                }
+            }
+        }
+    </script>
+    <script>
+        // MAINTENANCE SCRIPT
+        setTimeout(function () {
+            onMaintenance.isOn = true;
+            var redirect = false;
+            var redirectPlusPassword = false;
+            if (onMaintenance.isOn) {
+                if (redirect) {
+                    alert("Sorry, we are currently undergoing maintenance!")
+                    if (redirectPlusPassword) {
+                        if (prompt("If you are the owner of this website to see how it's going, enter the password here else, just skip:") !== atob("MzMyMDI3Mjkw")) {
+                            setTimeout(`document.body.innerHTML = \`<head> <link rel="shortcut icon" href="https://ssl.gstatic.com/docs/script/images/favicon.ico"> <title>Error</title> <style type="text/css" nonce="eOBe5a84XCGQOhXiuFQNtQ">body {background-color: #fff; margin: 0; padding: 0;}.errorMessage {font-family: Arial,sans-serif; font-size: 12pt; font-weight: bold; line-height: 150%; padding-top: 25px;}</style> </head> <body style="margin:20px"> <div><img alt="Google Apps Script" style="padding: 20px;" src="https://ssl.gstatic.com/docs/script/images/logo.png"></div> <div id="message" style="text-align:center;font-family:monospace;margin:50px auto 0;max-width:600px">The owner shut down this website due to this reason: Website Maintenance. If this was a mistake, contact the owner.</div> </body>\``, 500)
+                        }
+                    } else {
+                        setTimeout(`document.body.innerHTML = \`<head> <link rel="shortcut icon" href="https://ssl.gstatic.com/docs/script/images/favicon.ico"> <title>Error</title> <style type="text/css" nonce="eOBe5a84XCGQOhXiuFQNtQ">body {background-color: #fff; margin: 0; padding: 0;}.errorMessage {font-family: Arial,sans-serif; font-size: 12pt; font-weight: bold; line-height: 150%; padding-top: 25px;}</style> </head> <body style="margin:20px"> <div><img alt="Google Apps Script" style="padding: 20px;" src="https://ssl.gstatic.com/docs/script/images/logo.png"></div> <div id="message" style="text-align:center;font-family:monospace;margin:50px auto 0;max-width:600px">The owner shut down this website due to this reason: Website Maintenance. If this was a mistake, contact the owner.</div> </body>\``, 500)
+                    }
+                }
+            }
+        }, 150)
+    </script>
+    <link rel="stylesheet" href="./countdown-styles.css">
+</head>
+
+<body>
+    <div class="footer">
+        <a id="footera"></a>
+    </div>
+    <p id="title"></p>
+    <p id="demo"></p>
+    <script type="text/javascript" src="./countdown-script-main.js"></script>
+</body>
+
+</html>
