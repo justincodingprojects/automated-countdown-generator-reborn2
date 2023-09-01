@@ -8,16 +8,8 @@ Date.prototype.formatTime = function () {
     return `${this.getHours()}:${this.getMinutes()}:${this.getSeconds()}`;
 };
 
-Date.prototype.formatDate = function () {
-    return `${this.getMonth() + 1}/${this.getDate()}/${this.getFullYear()}`;
-};
-
-Date.prototype.formatTime = function () {
-    return `${this.getHours()}:${this.getMinutes()}:${this.getSeconds()}`;
-};
-
 function calculateCountdown(startTime) {
-    const now = ServerDate.now();
+    const now = Date.now();
     return startTime - now;
 }
 
@@ -27,17 +19,13 @@ function formatDuration(milliseconds) {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    return `${days}d ${hours % 24}h ${minutes % 60}m ${seconds % 60}s`;
+    return `${addTrailingZero(days)}d ${addTrailingZero(hours % 24)}h ${addTrailingZero(minutes % 60)}m ${addTrailingZero(seconds % 60)}s`;
 }
 
 function updateCountdownDisplay(block, countdown) {
-    document.getElementById(`title-${block}`).innerHTML = block;
-    document.title = `${countdown} - Auto. Countdown Generator | Justin Coding Projects`;
-    document.getElementById(`demo-${block}`).innerHTML = countdown;
-    
-    if (countdown === "Countdown Ended") {
-        clearInterval(countdownIntervals[block]);
-    }
+    document.getElementById("title").innerHTML = block;
+    document.title = `${block} - Auto. Countdown Generator | Justin Coding Projects`;
+    document.getElementById("demo").innerHTML = countdown;
 }
 
 function startCountdown(startTime, block) {
@@ -45,10 +33,12 @@ function startCountdown(startTime, block) {
         const countdown = calculateCountdown(startTime);
         const formattedCountdown = countdown > 0 ? formatDuration(countdown) : "Countdown Ended";
         updateCountdownDisplay(block, formattedCountdown);
+
+        if (countdown <= 0) {
+            clearInterval(currentBlock.interval);
+        }
     }, 50);
 }
-
-const countdownIntervals = {};
 
 function addTrailingZero(number) {
     return (number < 10 ? "0" : "") + number;
@@ -56,9 +46,7 @@ function addTrailingZero(number) {
 
 blockData.forEach((blockItem) => {
     const blockStartTime = new Date(blockItem.start_date).getTime();
-    const blockName = blockItem.block;
-    
-    countdownIntervals[blockName] = startCountdown(blockStartTime, blockName);
+    currentBlock = { block: blockItem.block, interval: startCountdown(blockStartTime, blockItem.block) };
 });
 
 let wakeLock = null;
