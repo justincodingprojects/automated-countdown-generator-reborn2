@@ -22,6 +22,12 @@ function formatDuration(milliseconds) {
     return `${addTrailingZero(days)}d ${addTrailingZero(hours % 24)}h ${addTrailingZero(minutes % 60)}m ${addTrailingZero(seconds % 60)}s`;
 }
 
+function updateCountdownDisplay(block, countdown) {
+    document.getElementById("title").innerHTML = block;
+    document.title = `${block} - Auto. Countdown Generator | Justin Coding Projects`;
+    document.getElementById("demo").innerHTML = countdown;
+}
+
 function startCountdown(startTime, block) {
     return setInterval(function () {
         const countdown = calculateCountdown(startTime);
