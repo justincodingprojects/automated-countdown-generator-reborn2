@@ -4,137 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Creator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-        }
-
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80vh;
-        }
-
-        .countdown-container {
-            text-align: center;
-            border: 1px solid #ccc;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .schedule-input {
-            margin-bottom: 1rem;
-        }
-
-        .countdown-timer {
-            display: none;
-        }
-
-        #countdown {
-            font-size: 2rem;
-            font-weight: bold;
+        h1 {
+          margin-top: 30px;  
         }
     </style>
-    <title>ACG v 2.0 | Justin Coding Projects</title>
 </head>
 
 <body>
-    <header>
-        <h1>ACG v 2.0</h1>
-    </header>
-    <main>
-        <div class="countdown-container">
-            <h2>Enter Schedule</h2>
-            <div class="schedule-input">
-                <label for="schedule">Enter schedule times:</label>
-                <input type="text" id="schedule" placeholder="e.g. 10:00, 14:30, 18:45">
-                <button id="start-countdown">Start Countdown</button>
+    <div class="container">
+        <h1>Schedule Creator</h1>
+        <form id="schedule-form">
+            <div id="schedule-inputs">
+                <div class="form-group schedule-input">
+                    <label for="name-1">Name</label>
+                    <input type="text" id="name-1" class="form-control" required>
+                    <label for="time-1">Time</label>
+                    <input type="time" id="time-1" class="form-control" required>
+                </div>
             </div>
-            <div class="countdown-timer">
-                <h3>Countdown:</h3>
-                <div id="countdown"></div>
-            </div>
-        </div>
-    </main>
+            <button type="button" id="add-schedule" class="btn btn-primary">Add Schedule</button>
+            <button type="button" id="submit-schedules" class="btn btn-success">Submit Schedules</button>
+        </form>
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-  const startCountdownButton = document.getElementById("start-countdown");
-  const countdownTimer = document.getElementById("countdown");
-  const scheduleInput = document.getElementById("schedule");
+        document.addEventListener('DOMContentLoaded', function () {
+            const scheduleForm = document.getElementById('schedule-form');
+            const scheduleInputsContainer = document.getElementById('schedule-inputs');
+            const addScheduleBtn = document.getElementById('add-schedule');
+            const submitSchedulesBtn = document.getElementById('submit-schedules');
 
-  let scheduleTimes = [];
-  let currentScheduleIndex = 0;
-  let intervalId;
+            let scheduleCount = 2;
 
-  startCountdownButton.addEventListener("click", function () {
-    scheduleTimes = scheduleInput.value.split(",").map(time => time.trim());
+            addScheduleBtn.addEventListener('click', function () {
+                const scheduleInput = document.createElement('div');
+                scheduleInput.classList.add('form-group', 'schedule-input');
+                scheduleInput.innerHTML = `
+            <label for="name-${scheduleCount}">Name</label>
+            <input type="text" id="name-${scheduleCount}" class="form-control" required>
+            <label for="time-${scheduleCount}">Time</label>
+            <input type="time" id="time-${scheduleCount}" class="form-control" required>
+        `;
+                scheduleInputsContainer.appendChild(scheduleInput);
+                scheduleCount++;
+            });
 
-    if (scheduleTimes.length > 0) {
-      startNextCountdown();
-    }
-  });
+            submitSchedulesBtn.addEventListener('click', function () {
+                const schedules = [];
+                const scheduleInputs = document.querySelectorAll('.schedule-input');
 
-  function startNextCountdown() {
-    if (currentScheduleIndex < scheduleTimes.length) {
-      countdownTimer.innerHTML = "";
-      countdownTimer.style.display = "block";
+                scheduleInputs.forEach(scheduleInput => {
+                    const nameInput = scheduleInput.querySelector(`input[id^="name"]`);
+                    const timeInput = scheduleInput.querySelector(`input[id^="time"]`);
+                    const name = nameInput.value;
+                    const time = timeInput.value;
+                    if (name && time) {
+                        schedules.push({ name, time });
+                    }
+                });
 
-      const targetTime = getNextScheduleTime(currentScheduleIndex);
-      const intervalDuration = targetTime - new Date().getTime();
-
-      if (intervalDuration > 0) {
-        intervalId = setInterval(updateCountdown, 1000);
-      }
-    }
-  }
-
-  function getNextScheduleTime(index) {
-    const now = new Date();
-    const currentTime = now.getTime();
-
-    const sortedTimes = scheduleTimes
-      .map(time => {
-        const [hours, minutes] = time.split(":");
-        const targetTime = new Date();
-        targetTime.setHours(hours);
-        targetTime.setMinutes(minutes);
-        targetTime.setSeconds(0);
-        return targetTime;
-      })
-      .sort((a, b) => a - b);
-
-    return sortedTimes[index];
-  }
-
-  function updateCountdown() {
-    const currentTime = new Date().getTime();
-    const targetTime = getNextScheduleTime(currentScheduleIndex);
-    const timeDifference = targetTime - currentTime;
-
-    if (timeDifference <= 0) {
-      clearInterval(intervalId);
-      countdownTimer.innerHTML += `<p>${scheduleTimes[currentScheduleIndex]} - Time's up!</p>`;
-      currentScheduleIndex++;
-      startNextCountdown();
-    } else {
-      const hoursLeft = Math.floor(timeDifference / (1000 * 60 * 60));
-      const minutesLeft = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-      const secondsLeft = Math.floor((timeDifference % (1000 * 60)) / 1000);
-      countdownTimer.innerHTML = `<p>${scheduleTimes[currentScheduleIndex]} - ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s</p>`;
-    }
-  }
-});
+                console.log(JSON.stringify(schedules));
+            });
+        });
     </script>
 </body>
 
