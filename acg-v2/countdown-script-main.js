@@ -1,15 +1,15 @@
-var currentBlock;
+var blocks = []; // Store the blocks data from JSON
+var currentBlockIndex = 0; // Index of the currently selected block
 
-Date.prototype.formatDate = function () {
-    return `${this.getMonth() + 1}/${this.getDate()}/${this.getFullYear()}`;
-};
+// Load JSON data and create dropdowns
+blocks = data;
 
-Date.prototype.formatTime = function () {
-    return `${this.getHours()}:${this.getMinutes()}:${this.getSeconds()}`;
-};
+function formatTime(time) {
+    return String(time).padStart(2, "0");
+}
 
 function calculateCountdown(startTime) {
-    const now = ServerDate.now();
+    const now = Date.now();
     return startTime - now;
 }
 
@@ -19,35 +19,42 @@ function formatDuration(milliseconds) {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    return `${addTrailingZero(days)}d ${addTrailingZero(hours % 24)}h ${addTrailingZero(minutes % 60)}m ${addTrailingZero(seconds % 60)}s`;
+    return `${formatTime(days)}d ${formatTime(hours % 24)}h ${formatTime(minutes % 60)}m ${formatTime(seconds % 60)}s`;
 }
 
-function updateCountdownDisplay(block, countdown) {
-    document.getElementById("title").innerHTML = block;
-    document.title = `${block} - Auto. Countdown Generator | Justin Coding Projects`;
-    document.getElementById("demo").innerHTML = countdown;
-}
+function updateCountdown() {
+    if (blocks.length > 0) {
+        var now = ServerDate.now();
+        var schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
+        var timeRemaining = schoolStartDate - now;
 
-function startCountdown(startTime, block) {
-    return setInterval(function () {
-        const countdown = calculateCountdown(startTime);
-        const formattedCountdown = countdown > 0 ? formatDuration(countdown) : "Countdown Ended";
-        updateCountdownDisplay(block, formattedCountdown);
-
-        if (countdown <= 0) {
-            clearInterval(currentBlock.interval);
+        // Check if the current countdown has ended
+        if (timeRemaining <= 0) {
+            // Move to the next block (if available)
+            currentBlockIndex++;
+            if (currentBlockIndex >= blocks.length) {
+                clearInterval(countdownInterval);
+                return; // No more blocks, stop countdown
+            }
+            schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
+            timeRemaining = schoolStartDate - now;
         }
-    }, 50);
+
+        var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        // Update countdown display
+        document.getElementById("days").innerText = formatTime((days < 0 ? 0 : days));
+        document.getElementById("hours").innerText = formatTime((hours < 0 ? 0 : hours));
+        document.getElementById("minutes").innerText = formatTime((minutes < 0 ? 0 : minutes));
+        document.getElementById("seconds").innerText = formatTime((seconds < 0 ? 0 : seconds));
+    }
 }
 
-function addTrailingZero(number) {
-    return (number < 10 ? "0" : "") + number;
-}
-
-blockData.forEach((blockItem) => {
-    const blockStartTime = new Date(blockItem.start_date).getTime();
-    currentBlock = { block: blockItem.block, interval: startCountdown(blockStartTime, blockItem.block) };
-});
+// Initial countdown update
+var countdownInterval = setInterval(updateCountdown, 50);
 
 let wakeLock = null;
 if ("wakeLock" in navigator) {
