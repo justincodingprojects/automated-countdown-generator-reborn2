@@ -40,16 +40,8 @@ function updateCountdown() {
             timeRemaining = schoolStartDate - now;
         }
 
-        var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
         // Update countdown display
-        document.getElementById("days").innerText = formatTime((days < 0 ? 0 : days));
-        document.getElementById("hours").innerText = formatTime((hours < 0 ? 0 : hours));
-        document.getElementById("minutes").innerText = formatTime((minutes < 0 ? 0 : minutes));
-        document.getElementById("seconds").innerText = formatTime((seconds < 0 ? 0 : seconds));
+        document.getElementById("demo").innerText = formatDuration(timeRemaining);
     }
 }
 
