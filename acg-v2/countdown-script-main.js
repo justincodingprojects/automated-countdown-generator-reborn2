@@ -22,23 +22,22 @@ function formatDuration(milliseconds) {
     return `${addTrailingZero(days)}d ${addTrailingZero(hours % 24)}h ${addTrailingZero(minutes % 60)}m ${addTrailingZero(seconds % 60)}s`;
 }
 
-function updateCountdownDisplay(block, countdown) {
-    document.getElementById("title").innerHTML = block;
-    document.title = `${block} - Auto. Countdown Generator | Justin Coding Projects`;
-    document.getElementById("demo").innerHTML = countdown;
-}
-
 function startCountdown(startTime, block) {
     return setInterval(function () {
         const countdown = calculateCountdown(startTime);
         const formattedCountdown = countdown > 0 ? formatDuration(countdown) : "Countdown Ended";
         updateCountdownDisplay(block, formattedCountdown);
-
-        if (countdown <= 0) {
-            clearInterval(currentBlock.interval);
-        }
     }, 50);
 }
+
+const countdownIntervals = {};
+
+blockData.forEach((blockItem) => {
+    const blockStartTime = new Date(blockItem.start_date).getTime();
+    const blockName = blockItem.block;
+    
+    countdownIntervals[blockName] = startCountdown(blockStartTime, blockName);
+});
 
 function addTrailingZero(number) {
     return (number < 10 ? "0" : "") + number;
