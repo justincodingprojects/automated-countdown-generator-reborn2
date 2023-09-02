@@ -261,7 +261,7 @@
                                 confirmButtonText: 'Yes',
                                 denyButtonText: 'No',
                                 showLoaderOnConfirm: true,
-                                preConfirm: (inputValue) => {
+                                preConfirm: () => {
                                     return new Promise((resolve) => {
                                         setTimeout(() => {
                                             savedSchedules.splice(selectedIndex, 1);
@@ -273,7 +273,7 @@
                                                     divElement.parentNode.removeChild(divElement);
                                                 }
                                             });
-
+                                            resolve();
                                         }, 1000);
                                     });
                                 },
