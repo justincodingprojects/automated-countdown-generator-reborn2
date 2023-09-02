@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACG v.2.0 | Justin Coding Projects</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background-color: black;
@@ -73,7 +74,7 @@
             </div>
             <button type="button" id="add-schedule" class="btn btn-primary">Add Schedule Block</button>
             <button type="button" id="submit-schedules" class="btn btn-success">Run Schedule</button>
-            <button type="button" id="save-schedule" class="btn btn-success">Save Schedule</button>
+            <button type="button" id="save-schedule" class="btn btn-info">Save Schedule</button>
         </form>
         <select id="saved-schedules">
             <option value="">Select a saved schedule</option>
@@ -174,10 +175,33 @@
             }
 
             function saveSchedulesToLocalStorage(schedules) {
-                const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
-                savedSchedules.push({ name: `Schedule ${savedSchedules.length + 1}`, schedules });
-                localStorage.setItem('savedSchedules', JSON.stringify(savedSchedules));
-                loadSavedSchedules();
+                Swal.fire({
+                    title: 'What would the name of the schedule be?',
+                    input: 'text',
+                    showCancelButton: true,
+                    confirmButtonText: 'Submit',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (inputValue) => {
+                        return new Promise((resolve) => {
+                            setTimeout(() => {
+                                if (inputValue === '') {
+                                    Swal.showValidationMessage('Please enter a value.');
+                                } else {
+                                    resolve(inputValue);
+                                }
+                            }, 1000);
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
+                        savedSchedules.push({ name: result.value, schedules });
+                        localStorage.setItem('savedSchedules', JSON.stringify(savedSchedules));
+                        loadSavedSchedules();
+                    }
+                });
             }
 
             savedSchedulesSelect.addEventListener('change', function () {
