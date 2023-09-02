@@ -170,6 +170,7 @@
                     scheduleTile.innerHTML = `
                         <h3>${schedule.name || `Schedule ${index + 1}`}</h3>
                         <button class="btn btn-primary load-schedule" data-index="${index}">Load Schedule</button>
+                        <button class="btn btn-success run-schedule" data-index="${index}">Run Schedule</button>
                     `;
                     savedSchedulesContainer.appendChild(scheduleTile);
                 });
@@ -214,6 +215,32 @@
                         if (selectedSchedule && selectedSchedule.schedules) {
                             // Populate the schedule inputs with the selected schedule data
                             populateScheduleInputs(selectedSchedule.schedules);
+                        }
+                    }
+                } else if (event.target.classList.contains('run-schedule')) {
+                    const selectedIndex = event.target.getAttribute('data-index');
+                    if (selectedIndex !== null) {
+                        const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
+                        const selectedSchedule = savedSchedules[selectedIndex];
+                        if (selectedSchedule && selectedSchedule.schedules) {
+                            // Run the schedule with the selected schedule data
+                            const iframeContainer = document.getElementById("iframeContainer");
+                            const contentIframe = document.getElementById("contentIframe");
+                            const iframeClose = document.getElementById("iframeClose");
+                            iframeContainer.style.display = "flex";
+                            fetch('./countdown.html')
+                                .then(response => {
+                                    return response.text();
+                                })
+                                .then(data => {
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(JSON.parse(savedSchedules)));
+                                })
+
+                            iframeClose.addEventListener("click", () => {
+                                iframeContainer.style.display = "none";
+                                contentIframe.srcdoc = "";
+                            });
+                            console.log(JSON.stringify(schedules));
                         }
                     }
                 }
