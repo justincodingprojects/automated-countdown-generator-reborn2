@@ -171,7 +171,7 @@
                         <h3>${schedule.name || `Schedule ${index + 1}`}</h3>
                         <button class="btn btn-primary load-schedule" data-index="${index}">Load Schedule</button>
                         <button class="btn btn-success run-schedule" data-index="${index}">Run Schedule</button>\
-                        <button class="btn btn-error delete-schedule" data-index="${index}">Delete Schedule</button>
+                        <button class="btn btn-danger delete-schedule" data-index="${index}">Delete Schedule</button>
                     `;
                     savedSchedulesContainer.appendChild(scheduleTile);
                 });
@@ -190,6 +190,10 @@
                             setTimeout(() => {
                                 if (inputValue === '') {
                                     Swal.showValidationMessage('Please enter a value.');
+                                    Swal.hideLoading();
+                                } else if (JSON.parse(localStorage.getItem('savedSchedules')).some(item => item.name === inputName)) {
+                                    Swal.showValidationMessage('Choose a name that is not already taken.');
+                                    Swal.hideLoading();
                                 } else {
                                     resolve(inputValue);
                                 }
@@ -245,7 +249,38 @@
                         }
                     }
                 } else if (event.target.classList.contains('delete-schedule')) {
+                    const selectedIndex = event.target.getAttribute('data-index');
+                    if (selectedIndex !== null) {
+                        const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
+                        const selectedSchedule = savedSchedules[selectedIndex];
+                        if (selectedSchedule && selectedSchedule.schedules) {
+                            Swal.fire({
+                                title: 'Delete Schedule',
+                                text: "You are about to delete a schedule. This action cannot be reversed. Do you want to delete this schedule?",
+                                showDenyButton: true,
+                                confirmButtonText: 'Yes',
+                                denyButtonText: 'No',
+                                showLoaderOnConfirm: true,
+                                preConfirm: (inputValue) => {
+                                    return new Promise((resolve) => {
+                                        setTimeout(() => {
+                                            savedSchedules.splice(selectedIndex, 1);
+                                            localStorage.setItem('savedSchedules', JSON.stringify(savedSchedules));
+                                            const tiles = document.querySelectorAll('.saved-schedule-tile');
+                                            tiles.forEach((divElement) => {
+                                                const dataIndex = divElement.querySelector('.delete-schedule').getAttribute('data-index');
+                                                if (dataIndex === selectedIndex.toString()) {
+                                                    divElement.parentNode.removeChild(divElement);
+                                                }
+                                            });
 
+                                        }, 1000);
+                                    });
+                                },
+                                allowOutsideClick: () => !Swal.isLoading()
+                            })
+                        }
+                    }
                 }
             });
 
