@@ -266,13 +266,7 @@
                                         setTimeout(() => {
                                             savedSchedules.splice(selectedIndex, 1);
                                             localStorage.setItem('savedSchedules', JSON.stringify(savedSchedules));
-                                            const tiles = document.querySelectorAll('.saved-schedule-tile');
-                                            tiles.forEach((divElement) => {
-                                                const dataIndex = divElement.querySelector('.delete-schedule').getAttribute('data-index');
-                                                if (dataIndex === selectedIndex.toString()) {
-                                                    divElement.parentNode.removeChild(divElement);
-                                                }
-                                            });
+                                            loadSavedSchedules();
                                             resolve();
                                         }, 1000);
                                     });
