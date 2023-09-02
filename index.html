@@ -204,7 +204,7 @@
                         <label for="name-${index}">Name</label>
                         <input type="text" id="name-${index}" class="form-control" required value="${schedule.block || ''}">
                         <label for="time-${index}">Time</label>
-                        <input type="time" id="time-${index}" class="form-control" required value="${schedule.start_date || ''}">
+                        <input type="time" id="time-${index}" class="form-control" required value="${schedule.start_date.split("T")[1] || ''}">
                     `;
                     scheduleInputsContainer.appendChild(scheduleInput);
                 });
