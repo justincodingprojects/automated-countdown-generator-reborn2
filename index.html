@@ -76,9 +76,7 @@
             <button type="button" id="submit-schedules" class="btn btn-success">Run Schedule</button>
             <button type="button" id="save-schedule" class="btn btn-info">Save Schedule</button>
         </form>
-        <select id="saved-schedules">
-            <option value="">Select a saved schedule</option>
-        </select>
+        <div id="saved-schedules-container"></div>
     </div>
     <div id="iframeContainer">
         <div id="iframeBox">
@@ -94,7 +92,7 @@
             const addScheduleBtn = document.getElementById('add-schedule');
             const submitSchedulesBtn = document.getElementById('submit-schedules');
             const saveScheduleBtn = document.getElementById('save-schedule');
-            const savedSchedulesSelect = document.getElementById('saved-schedules');
+            const savedSchedulesContainer = document.getElementById('saved-schedules-container');
 
             let scheduleCount = 2;
 
@@ -165,12 +163,15 @@
 
             function loadSavedSchedules() {
                 const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
-                savedSchedulesSelect.innerHTML = '<option value="">Select a saved schedule</option>';
+                savedSchedulesContainer.innerHTML = '';
                 savedSchedules.forEach((schedule, index) => {
-                    const option = document.createElement('option');
-                    option.value = index;
-                    option.textContent = schedule.name || `Schedule ${index + 1}`;
-                    savedSchedulesSelect.appendChild(option);
+                    const scheduleTile = document.createElement('div');
+                    scheduleTile.classList.add('saved-schedule-tile');
+                    scheduleTile.innerHTML = `
+                        <h3>${schedule.name || `Schedule ${index + 1}`}</h3>
+                        <button class="btn btn-primary load-schedule" data-index="${index}">Load Schedule</button>
+                    `;
+                    savedSchedulesContainer.appendChild(scheduleTile);
                 });
             }
 
@@ -204,14 +205,16 @@
                 });
             }
 
-            savedSchedulesSelect.addEventListener('change', function () {
-                const selectedIndex = this.value;
-                if (selectedIndex !== "") {
-                    const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
-                    const selectedSchedule = savedSchedules[selectedIndex];
-                    if (selectedSchedule && selectedSchedule.schedules) {
-                        // Populate the schedule inputs with the selected schedule data
-                        populateScheduleInputs(selectedSchedule.schedules);
+            savedSchedulesContainer.addEventListener('click', function (event) {
+                if (event.target.classList.contains('load-schedule')) {
+                    const selectedIndex = event.target.getAttribute('data-index');
+                    if (selectedIndex !== null) {
+                        const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
+                        const selectedSchedule = savedSchedules[selectedIndex];
+                        if (selectedSchedule && selectedSchedule.schedules) {
+                            // Populate the schedule inputs with the selected schedule data
+                            populateScheduleInputs(selectedSchedule.schedules);
+                        }
                     }
                 }
             });
