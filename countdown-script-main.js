@@ -26,23 +26,30 @@ function updateCountdown() {
     if (blocks.length > 0) {
         var now = ServerDate.now();
         var schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
-        var timeRemaining = schoolStartDate - now;
+        var timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length)-1) ? 0 : 1000);
 
         // Check if the current countdown has ended
         if (timeRemaining <= 0) {
             // Move to the next block (if available)
             currentBlockIndex++;
             if (currentBlockIndex >= blocks.length) {
+                document.getElementById("demo").innerText = ((blocks.length > 1) ? "Schedule Ended" : "Countdown Ended");
                 clearInterval(countdownInterval);
                 return; // No more blocks, stop countdown
             }
             schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
-            timeRemaining = schoolStartDate - now;
+            timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length)-1) ? 0 : 1000);
         }
 
         // Update countdown display
         document.getElementById("title").innerHTML = blocks[currentBlockIndex].block;
         document.getElementById("demo").innerText = formatDuration(timeRemaining);
+    } else {
+        // Update countdown display
+        document.getElementById("title").innerHTML = "Undefined Countdown";
+        document.getElementById("demo").innerText = "Countdown Ended";
+        clearInterval(countdownInterval);
+        return;
     }
 }
 
