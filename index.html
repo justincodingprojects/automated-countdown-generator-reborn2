@@ -233,14 +233,14 @@
                                     return response.text();
                                 })
                                 .then(data => {
-                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule));
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule.schedules));
                                 })
 
                             iframeClose.addEventListener("click", () => {
                                 iframeContainer.style.display = "none";
                                 contentIframe.srcdoc = "";
                             });
-                            console.log(JSON.stringify(selectedSchedule));
+                            console.log(JSON.stringify(selectedSchedule.schedules));
                         }
                     }
                 }
