@@ -233,14 +233,14 @@
                                     return response.text();
                                 })
                                 .then(data => {
-                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(JSON.parse(savedSchedules)));
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(savedSchedules));
                                 })
 
                             iframeClose.addEventListener("click", () => {
                                 iframeContainer.style.display = "none";
                                 contentIframe.srcdoc = "";
                             });
-                            console.log(JSON.stringify(JSON.parse(savedSchedules)));
+                            console.log(JSON.stringify(savedSchedules));
                         }
                     }
                 }
