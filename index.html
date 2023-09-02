@@ -191,7 +191,7 @@
                                 if (inputValue === '') {
                                     Swal.showValidationMessage('Please enter a value.');
                                     Swal.hideLoading();
-                                } else if (JSON.parse(localStorage.getItem('savedSchedules')).some(item => item.name === inputName)) {
+                                } else if ((JSON.parse(localStorage.getItem('savedSchedules')) || []).some(item => item.name === inputName)) {
                                     Swal.showValidationMessage('Choose a name that is not already taken.');
                                     Swal.hideLoading();
                                 } else {
