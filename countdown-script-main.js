@@ -25,8 +25,9 @@ function formatDuration(milliseconds) {
 function updateCountdown() {
     if (blocks.length > 0) {
         var now = ServerDate.now();
-        var schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
-        var timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length)-1) ? 0 : 1000);
+        const currentDate = new Date();
+        var schoolStartDate = new ServerDate(`${currentDate.getFullYear()}-${formatTime(currentDate.getMonth() + 1)}-${formatTime(currentDate.getDate())}T${blocks[currentBlockIndex].start_date}`).getTime();
+        var timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000);
 
         // Check if the current countdown has ended
         if (timeRemaining <= 0) {
@@ -37,8 +38,8 @@ function updateCountdown() {
                 clearInterval(countdownInterval);
                 return; // No more blocks, stop countdown
             }
-            schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
-            timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length)-1) ? 0 : 1000);
+            schoolStartDate = new ServerDate(blocks[currentBlockIndex].start_date).getTime();
+            timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000);
         }
 
         // Update countdown display
