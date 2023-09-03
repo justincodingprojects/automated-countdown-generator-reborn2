@@ -197,7 +197,7 @@
                                 } else {
                                     resolve(inputValue);
                                 }
-                            }, 1000);
+                            }, (Math.floor(Math.random() * 501) + 500));
                         });
                     },
                     allowOutsideClick: () => !Swal.isLoading()
@@ -268,7 +268,7 @@
                                             localStorage.setItem('savedSchedules', JSON.stringify(savedSchedules));
                                             loadSavedSchedules();
                                             resolve();
-                                        }, 1000);
+                                        }, (Math.floor(Math.random() * 501) + 500));
                                     });
                                 },
                                 allowOutsideClick: () => !Swal.isLoading()

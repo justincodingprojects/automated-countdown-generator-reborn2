@@ -26,7 +26,7 @@ function updateCountdown() {
     if (blocks.length > 0) {
         var now = ServerDate.now();
         const currentDate = new Date();
-        var schoolStartDate = new ServerDate(`${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}T${blocks[currentBlockIndex].start_date}`).getTime();
+        var schoolStartDate = new ServerDate(blocks[currentBlockIndex].start_date).getTime();
         var timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000);
 
         // Check if the current countdown has ended
