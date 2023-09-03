@@ -152,7 +152,7 @@
                     const timeInput = scheduleInput.querySelector(`input[id^="time"]`);
                     const currentDate = new Date();
                     const block = nameInput.value;
-                    const start_date = `[YEAR]-[MONTH]-[DAY]-T${timeInput.value}`;
+                    const start_date = `[DATE]T${timeInput.value}`;
                     if (block && start_date) {
                         schedules.push({ block, start_date });
                     }
@@ -237,7 +237,7 @@
                                     return response.text();
                                 })
                                 .then(data => {
-                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule.schedules).replaceAll("[YEAR]", new Date().getFullYear()).replaceAll("[MONTH]", new Date().getMonth() + 1).replaceAll("[DAY]", new Date().getDate()));
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", (JSON.stringify(selectedSchedule.schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`)));
                                 })
 
                             iframeClose.addEventListener("click", () => {
