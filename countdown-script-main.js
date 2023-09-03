@@ -25,7 +25,6 @@ function formatDuration(milliseconds) {
 function updateCountdown() {
     if (blocks.length > 0) {
         var now = ServerDate.now();
-        const currentDate = new Date();
         var schoolStartDate = new ServerDate(blocks[currentBlockIndex].start_date).getTime();
         var timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000);
 
