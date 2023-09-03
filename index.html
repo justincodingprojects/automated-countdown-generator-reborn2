@@ -151,8 +151,8 @@
                     const nameInput = scheduleInput.querySelector(`input[id^="name"]`);
                     const timeInput = scheduleInput.querySelector(`input[id^="time"]`);
                     const currentDate = new Date();
-                    const block = `[YEAR]-[MONTH]-[DAY]-TnameInput.value`;
-                    const start_date = `${timeInput.value}`;
+                    const block = nameInput.value;
+                    const start_date = `[YEAR]-[MONTH]-[DAY]-T${timeInput.value}`;
                     if (block && start_date) {
                         schedules.push({ block, start_date });
                     }
