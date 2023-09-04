@@ -80,6 +80,10 @@
             <button type="button" id="add-schedule" class="btn btn-primary">Add Schedule Block</button>
             <button type="button" id="submit-schedules" class="btn btn-success">Run Schedule</button>
             <button type="button" id="save-schedule" class="btn btn-info">Save Schedule</button>
+            <input type="file" id="import-file" accept=".json" style="display: none;">
+            <button type="button" id="import-schedule" class="btn btn-info">Import Schedules</button>
+            <button type="button" id="export-schedule" class="btn btn-warning" style="display: none;">Export
+                Schedules</button>
         </form>
         <div id="saved-schedules-container"></div>
     </div>
@@ -98,6 +102,9 @@
             const submitSchedulesBtn = document.getElementById('submit-schedules');
             const saveScheduleBtn = document.getElementById('save-schedule');
             const savedSchedulesContainer = document.getElementById('saved-schedules-container');
+            const importScheduleBtn = document.getElementById('import-schedule');
+            const importFileInput = document.getElementById("import-file");
+            const exportScheduleBtn = document.getElementById('export-schedule');
 
             let scheduleCount = 2;
 
@@ -165,6 +172,64 @@
                 saveSchedulesToLocalStorage(schedules);
             });
 
+            exportScheduleBtn.addEventListener('click', function () {
+                const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
+                const exportData = JSON.stringify(savedSchedules, null, 2); // Pretty-print JSON
+
+                const blob = new Blob([exportData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'schedules.json';
+
+                document.body.appendChild(a);
+                a.click();
+
+                window.URL.revokeObjectURL(url);
+            });
+
+            importScheduleBtn.addEventListener('click', function () {
+                importFileInput.click();
+            });
+
+            // Handle file input change event
+            importFileInput.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const importedSchedules = JSON.parse(e.target.result);
+                        Swal.fire({
+                            title: 'Import Schedules',
+                            icon: "warning",
+                            html: `<h1>The following schedules will be imported:</h1><ul>${importedSchedules.map(item => item.block).map(name => `<li>${name}</li>`).join('')}</ul>`,
+                            color: "#e1e1e1",
+                            showDenyButton: true,
+                            confirmButtonText: 'Import',
+                            denyButtonText: 'No',
+                            showLoaderOnConfirm: true,
+                            preConfirm: () => {
+                                return new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                    }, (Math.floor(Math.random() * 501) + 500));
+                                });
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                localStorage.setItem('savedSchedules', JSON.stringify(importedSchedules));
+                                loadSavedSchedules();
+                            }
+                        });
+                    };
+                    reader.readAsText(file);
+                }
+            });
+
+
             function loadSavedSchedules() {
                 const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
                 savedSchedulesContainer.innerHTML = '';
@@ -189,7 +254,7 @@
                     text: "What do you want to call this schedule?",
                     color: "#e1e1e1",
                     showCancelButton: true,
-                    confirmButtonText: 'Submit',
+                    confirmButtonText: 'Save',
                     cancelButtonText: 'Cancel',
                     showLoaderOnConfirm: true,
                     preConfirm: (inputValue) => {
