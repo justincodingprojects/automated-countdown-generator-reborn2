@@ -185,6 +185,8 @@
                 Swal.fire({
                     title: 'What would the name of the schedule be?',
                     input: 'text',
+                    icon: "question",
+                    color: "#e1e1e1",
                     showCancelButton: true,
                     confirmButtonText: 'Submit',
                     cancelButtonText: 'Cancel',
@@ -261,6 +263,9 @@
                             Swal.fire({
                                 title: 'Delete Schedule',
                                 text: "You are about to delete a schedule. This action cannot be reversed. Do you want to delete this schedule?",
+                                icon: "warning",
+                                color: "#e1e1e1",
+                                focusDeny: true,
                                 showDenyButton: true,
                                 confirmButtonText: 'Yes',
                                 denyButtonText: 'No',
