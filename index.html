@@ -227,6 +227,9 @@
                             } else if (result.isDenied) {
                                 importFileInput.value = '';
                                 importFileInput.files.length = 0;
+                            } else if (result.isDismissed) {
+                                importFileInput.value = '';
+                                importFileInput.files.length = 0;
                             }
                         });
                     };
