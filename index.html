@@ -171,8 +171,8 @@
                 });
                 saveSchedulesToLocalStorage(schedules);
             });
-            
-            if ((JSON.stringify(JSON.parse(localStorage.getItem('savedSchedules'))) || JSON.stringify([])) !== JSON.stringify([])) {
+
+            if (localStorage.getItem('savedSchedules') === null || localStorage.getItem('savedSchedules').trim() === "") {
                 exportScheduleBtn.style.display = "block";
             }
 
