@@ -82,7 +82,7 @@
             <button type="button" id="save-schedule" class="btn btn-info">Save Schedule</button>
             <input type="file" id="import-file" accept=".json" style="display: none;">
             <button type="button" id="import-schedule" class="btn btn-info">Import Schedules</button>
-            <button type="button" id="export-schedule" class="btn btn-warning" style="display: none;">Export
+            <button type="button" id="export-schedule" class="btn btn-warning">Export
                 Schedules</button>
         </form>
         <div id="saved-schedules-container"></div>
@@ -222,19 +222,11 @@
                             if (result.isConfirmed) {
                                 localStorage.setItem('savedSchedules', JSON.stringify(importedSchedules));
                                 loadSavedSchedules();
-                                const newFileInput = document.createElement('input');
-                                newFileInput.type = 'file';
-                                newFileInput.id = 'fileInput';
-                                newFileInput.accept = ".json";
-                                newFileInput.style.display = "none";
-                                importFileInput.parentNode.replaceChild(newFileInput, importFileInput);
+                                importFileInput.value = '';
+                                importFileInput.files.length = 0;
                             } else if (result.isDenied) {
-                                const newFileInput = document.createElement('input');
-                                newFileInput.type = 'file';
-                                newFileInput.id = 'fileInput';
-                                newFileInput.accept = ".json";
-                                newFileInput.style.display = "none";
-                                importFileInput.parentNode.replaceChild(newFileInput, importFileInput);
+                                importFileInput.value = '';
+                                importFileInput.files.length = 0;
                             }
                         });
                     };
@@ -247,7 +239,6 @@
                 const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
                 savedSchedulesContainer.innerHTML = '';
                 savedSchedules.forEach((schedule, index) => {
-                    exportScheduleBtn.style.display = "block";
                     const scheduleTile = document.createElement('div');
                     scheduleTile.classList.add('saved-schedule-tile');
                     scheduleTile.innerHTML = `
@@ -293,7 +284,6 @@
                         savedSchedules.push({ name: result.value, schedules });
                         localStorage.setItem('savedSchedules', JSON.stringify(savedSchedules));
                         loadSavedSchedules();
-                        exportScheduleBtn.style.display = "block";
                     }
                 });
             }
