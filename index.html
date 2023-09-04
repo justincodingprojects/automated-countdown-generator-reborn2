@@ -237,14 +237,14 @@
                                     return response.text();
                                 })
                                 .then(data => {
-                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", (JSON.stringify(selectedSchedule.schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`)));
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule.schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
                                 })
 
                             iframeClose.addEventListener("click", () => {
                                 iframeContainer.style.display = "none";
                                 contentIframe.srcdoc = "";
                             });
-                            console.log(JSON.stringify(selectedSchedule.schedules));
+                            console.log(JSON.stringify(selectedSchedule.schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
                         }
                     }
                 } else if (event.target.classList.contains('delete-schedule')) {
