@@ -27,6 +27,6 @@ No installation is required. Simply visit [justincodingprojects.org](https://jus
 If you encounter any issues or have questions, please check the FAQ for answers. If you need further assistance, you can contact me at [justincodingprojects@gmail.com](mailto:justincodingprojects+support@gmail.com).
 
 ## License
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the [MIT License](LICENSE).
 
 Thank you for using my countdown! We hope this tool helps you keep track of your important events and deadlines. If you have any feedback or suggestions, please feel free to reach out to us.
