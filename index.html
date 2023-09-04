@@ -172,12 +172,6 @@
                 saveSchedulesToLocalStorage(schedules);
             });
 
-            if (localStorage.getItem('savedSchedules') !== null) {
-                if (localStorage.getItem('savedSchedules').trim() !== "") {
-                    exportScheduleBtn.style.display = "block";
-                }
-            }
-
             exportScheduleBtn.addEventListener('click', function () {
                 const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
                 const exportData = JSON.stringify(savedSchedules, null, 2); // Pretty-print JSON
@@ -298,6 +292,7 @@
                         const selectedSchedule = savedSchedules[selectedIndex];
                         if (selectedSchedule && selectedSchedule.schedules) {
                             // Populate the schedule inputs with the selected schedule data
+                            exportScheduleBtn.style.display = "block";
                             populateScheduleInputs(selectedSchedule.schedules);
                         }
                     }
