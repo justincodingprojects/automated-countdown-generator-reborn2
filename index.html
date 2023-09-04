@@ -172,7 +172,7 @@
                 saveSchedulesToLocalStorage(schedules);
             });
 
-            if (localStorage.getItem('savedSchedules') === null || localStorage.getItem('savedSchedules').trim() === "") {
+            if (localStorage.getItem('savedSchedules') !== null || localStorage.getItem('savedSchedules').trim() !== "") {
                 exportScheduleBtn.style.display = "block";
             }
 
