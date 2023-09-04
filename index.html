@@ -227,14 +227,14 @@
                                 newFileInput.id = 'fileInput';
                                 newFileInput.accept = ".json";
                                 newFileInput.style.display = "none";
-                                importFileInput.parentNode.replaceChild(newFileInput, fileInput);
+                                importFileInput.parentNode.replaceChild(newFileInput, importFileInput);
                             } else if (result.isDenied) {
                                 const newFileInput = document.createElement('input');
                                 newFileInput.type = 'file';
                                 newFileInput.id = 'fileInput';
                                 newFileInput.accept = ".json";
                                 newFileInput.style.display = "none";
-                                importFileInput.parentNode.replaceChild(newFileInput, fileInput);
+                                importFileInput.parentNode.replaceChild(newFileInput, importFileInput);
                             }
                         });
                     };
