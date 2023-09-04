@@ -172,8 +172,10 @@
                 saveSchedulesToLocalStorage(schedules);
             });
 
-            if (localStorage.getItem('savedSchedules') !== null || localStorage.getItem('savedSchedules').trim() !== "") {
-                exportScheduleBtn.style.display = "block";
+            if (localStorage.getItem('savedSchedules') !== null) {
+                if (localStorage.getItem('savedSchedules').trim() !== "") {
+                    exportScheduleBtn.style.display = "block";
+                }
             }
 
             exportScheduleBtn.addEventListener('click', function () {
