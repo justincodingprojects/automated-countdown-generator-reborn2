@@ -33,7 +33,7 @@ function updateCountdown() {
             // Move to the next block (if available)
             currentBlockIndex++;
             if (currentBlockIndex >= blocks.length) {
-                document.getElementById("title").innerHTML = blocks[0].block;
+                document.getElementById("title").innerHTML = blocks[blocks.length-1].block;
                 document.getElementById("demo").innerText = ((blocks.length > 1) ? "Schedule Ended" : "Countdown Ended");
                 clearInterval(countdownInterval);
                 return; // No more blocks, stop countdown
