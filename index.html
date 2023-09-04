@@ -171,6 +171,10 @@
                 });
                 saveSchedulesToLocalStorage(schedules);
             });
+            
+            if ((JSON.parse(localStorage.getItem('savedSchedules')) || []) !== []) {
+                exportScheduleBtn.style.display = "block";
+            }
 
             exportScheduleBtn.addEventListener('click', function () {
                 const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
