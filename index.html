@@ -204,7 +204,7 @@
                         Swal.fire({
                             title: 'Import Schedules',
                             icon: "warning",
-                            html: `<h1>The following schedules will be imported:</h1><ul>${importedSchedules.map(item => item.block).map(name => `<li>${name}</li>`).join('')}</ul>`,
+                            html: `<p>The following schedules will be imported:</p><ul>${importedSchedules.map(item => item.name).map(name => `<li>${name}</li>`).join('')}</ul>`,
                             color: "#e1e1e1",
                             showDenyButton: true,
                             confirmButtonText: 'Import',
@@ -222,6 +222,19 @@
                             if (result.isConfirmed) {
                                 localStorage.setItem('savedSchedules', JSON.stringify(importedSchedules));
                                 loadSavedSchedules();
+                                const newFileInput = document.createElement('input');
+                                newFileInput.type = 'file';
+                                newFileInput.id = 'fileInput';
+                                newFileInput.accept = ".json";
+                                newFileInput.style.display = "none";
+                                importFileInput.parentNode.replaceChild(newFileInput, fileInput);
+                            } else if (result.isDenied) {
+                                const newFileInput = document.createElement('input');
+                                newFileInput.type = 'file';
+                                newFileInput.id = 'fileInput';
+                                newFileInput.accept = ".json";
+                                newFileInput.style.display = "none";
+                                importFileInput.parentNode.replaceChild(newFileInput, fileInput);
                             }
                         });
                     };
