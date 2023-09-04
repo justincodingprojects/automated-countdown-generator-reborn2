@@ -285,6 +285,7 @@
                         savedSchedules.push({ name: result.value, schedules });
                         localStorage.setItem('savedSchedules', JSON.stringify(savedSchedules));
                         loadSavedSchedules();
+                        exportScheduleBtn.style.display = "block";
                     }
                 });
             }
