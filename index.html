@@ -234,6 +234,7 @@
                 const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
                 savedSchedulesContainer.innerHTML = '';
                 savedSchedules.forEach((schedule, index) => {
+                    exportScheduleBtn.style.display = "block";
                     const scheduleTile = document.createElement('div');
                     scheduleTile.classList.add('saved-schedule-tile');
                     scheduleTile.innerHTML = `
@@ -292,7 +293,6 @@
                         const selectedSchedule = savedSchedules[selectedIndex];
                         if (selectedSchedule && selectedSchedule.schedules) {
                             // Populate the schedule inputs with the selected schedule data
-                            exportScheduleBtn.style.display = "block";
                             populateScheduleInputs(selectedSchedule.schedules);
                         }
                     }
