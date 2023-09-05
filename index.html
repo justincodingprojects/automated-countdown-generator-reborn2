@@ -7,6 +7,8 @@
     <title>ACG v.2.0 | Justin Coding Projects</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link rel="stylesheet" href="sweetalert2-dark.css">
     <style>
         body {
@@ -107,6 +109,24 @@
             const exportScheduleBtn = document.getElementById('export-schedule');
 
             let scheduleCount = 2;
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
 
             loadSavedSchedules();
 
@@ -222,6 +242,7 @@
                             if (result.isConfirmed) {
                                 localStorage.setItem('savedSchedules', JSON.stringify(importedSchedules));
                                 loadSavedSchedules();
+                                toastr.success(`${importedSchedules.map(item => item.name).length} schedules imported!`, "Schedules Imported")
                                 importFileInput.value = '';
                                 importFileInput.files.length = 0;
                             } else if (result.isDenied) {
