@@ -49,7 +49,7 @@ function updateCountdown() {
 
         // Update countdown display
         document.getElementById("title").innerHTML = (((schoolStartDate-now) <= 0) ? countdownName : blocks[currentBlockIndex].block);
-        document.getElementById("demo").innerText = (((schoolStartDate-now) <= 0) ? countdownName : formatDuration(timeRemaining));
+        document.getElementById("demo").innerText = (((schoolStartDate-now) <= 0) ? "Loading..." : formatDuration(timeRemaining));
     } else {
         // Update countdown display
         document.getElementById("title").innerHTML = "Undefined Countdown";
