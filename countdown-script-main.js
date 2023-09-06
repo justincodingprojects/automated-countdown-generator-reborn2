@@ -1,8 +1,10 @@
 var blocks = []; // Store the blocks data from JSON
+var countdownName = "";
 var currentBlockIndex = 0; // Index of the currently selected block
 
 // Load JSON data and create dropdowns
-blocks = data;
+blocks = data.schedules;
+countdownName = data.name;
 
 function formatTime(time) {
     return String(time).padStart(2, "0");
@@ -46,8 +48,8 @@ function updateCountdown() {
         }
 
         // Update countdown display
-        document.getElementById("title").innerHTML = blocks[currentBlockIndex].block;
-        document.getElementById("demo").innerText = formatDuration(timeRemaining);
+        document.getElementById("title").innerHTML = (((schoolStartDate-now) <= 0) ? countdownName : blocks[currentBlockIndex].block);
+        document.getElementById("demo").innerText = (((schoolStartDate-now) <= 0) ? countdownName : formatDuration(timeRemaining));
     } else {
         // Update countdown display
         document.getElementById("title").innerHTML = "Undefined Countdown";
