@@ -46,8 +46,8 @@ function updateCountdown() {
         }
 
         // Update countdown display
-        document.getElementById("title").innerHTML = ((timeRemaining <= 0) ? countdownName : blocks[currentBlockIndex].block);
-        document.getElementById("demo").innerText = ((timeRemaining <= 0) ? "Loading..." : formatDuration(timeRemaining));
+        document.getElementById("title").innerHTML = ((timeRemaining <= ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000)) ? countdownName : blocks[currentBlockIndex].block);
+        document.getElementById("demo").innerText = ((timeRemaining <= ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000)) ? "Loading..." : formatDuration(timeRemaining));
     } else {
         // Update countdown display
         document.getElementById("title").innerHTML = "Undefined Countdown";
