@@ -46,7 +46,7 @@ function updateCountdown() {
         }
 
         // Update countdown display
-        document.getElementById("title").innerHTML = ((timeRemaining <= 0) ? name : blocks[currentBlockIndex].block);
+        document.getElementById("title").innerHTML = ((timeRemaining <= 0) ? countdownName : blocks[currentBlockIndex].block);
         document.getElementById("demo").innerText = ((timeRemaining <= 0) ? "Loading..." : formatDuration(timeRemaining));
     } else {
         // Update countdown display
