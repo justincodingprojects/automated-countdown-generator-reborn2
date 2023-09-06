@@ -268,9 +268,9 @@
                     scheduleTile.classList.add('saved-schedule-tile');
                     scheduleTile.innerHTML = `
                         <h3>${schedule.name || `Schedule ${index + 1}`}</h3>
-                        <button class="btn btn-primary load-schedule" data-index="${index}">Load ${((schedule.schedules.length == 0) ? "Countdown" : "Schedule")}</button>
-                        <button class="btn btn-success run-schedule" data-index="${index}">Run ${((schedule.schedules.length == 0) ? "Countdown" : "Schedule")}</button>\
-                        <button class="btn btn-danger delete-schedule" data-index="${index}">Delete ${((schedule.schedules.length == 0) ? "Countdown" : "Schedule")}</button>
+                        <button class="btn btn-primary load-schedule" data-index="${index}">Load ${((schedule.schedules.length == 1) ? "Countdown" : "Schedule")}</button>
+                        <button class="btn btn-success run-schedule" data-index="${index}">Run ${((schedule.schedules.length == 1) ? "Countdown" : "Schedule")}</button>\
+                        <button class="btn btn-danger delete-schedule" data-index="${index}">Delete ${((schedule.schedules.length == 1) ? "Countdown" : "Schedule")}</button>
                     `;
                     savedSchedulesContainer.appendChild(scheduleTile);
                 });
