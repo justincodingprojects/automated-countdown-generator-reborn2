@@ -166,7 +166,7 @@
                         return response.text();
                     })
                     .then(data => {
-                        contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(schedules)).replace("\"\" // COUNTDOWN_NAME", ((schedules.length == 1) ? "Countdown" : "Schedule"));
+                        contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(schedules));
                     })
 
                 iframeClose.addEventListener("click", () => {
@@ -341,7 +341,7 @@
                                     return response.text();
                                 })
                                 .then(data => {
-                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule.schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`)).replace("\"\" // COUNTDOWN_NAME", selectedSchedule.name);
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule.schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
                                 })
 
                             iframeClose.addEventListener("click", () => {

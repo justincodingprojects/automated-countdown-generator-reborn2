@@ -46,8 +46,8 @@ function updateCountdown() {
         }
 
         // Update countdown display
-        document.getElementById("title").innerHTML = ((timeRemaining <= 1000) ? countdownName : blocks[currentBlockIndex].block);
-        document.getElementById("demo").innerText = ((timeRemaining <= 1000) ? "Loading..." : formatDuration(timeRemaining));
+        document.getElementById("title").innerHTML = blocks[currentBlockIndex].block;
+        document.getElementById("demo").innerText = formatDuration(timeRemaining);
     } else {
         // Update countdown display
         document.getElementById("title").innerHTML = "Undefined Countdown";
