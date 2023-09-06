@@ -265,12 +265,13 @@
                 savedSchedulesContainer.innerHTML = '';
                 savedSchedules.forEach((schedule, index) => {
                     const scheduleTile = document.createElement('div');
+                    const countdownType = ((schedule.schedules.length == 1) ? "Countdown" : "Schedule")
                     scheduleTile.classList.add('saved-schedule-tile');
                     scheduleTile.innerHTML = `
                         <h3>${schedule.name || `Schedule ${index + 1}`}</h3>
-                        <button class="btn btn-primary load-schedule" data-index="${index}">Load ${((schedule.schedules.length == 1) ? "Countdown" : "Schedule")}</button>
-                        <button class="btn btn-success run-schedule" data-index="${index}">Run ${((schedule.schedules.length == 1) ? "Countdown" : "Schedule")}</button>\
-                        <button class="btn btn-danger delete-schedule" data-index="${index}">Delete ${((schedule.schedules.length == 1) ? "Countdown" : "Schedule")}</button>
+                        <button class="btn btn-primary load-schedule" data-index="${index}" data-countdown_type="${countdownType}">Load ${countdownType}</button>
+                        <button class="btn btn-success run-schedule" data-index="${index}" data-countdown_type="${countdownType}">Run ${countdownType}</button>\
+                        <button class="btn btn-danger delete-schedule" data-index="${index}" data-countdown_type="${countdownType}">Delete ${countdownType}</button>
                     `;
                     savedSchedulesContainer.appendChild(scheduleTile);
                 });
@@ -352,13 +353,14 @@
                     }
                 } else if (event.target.classList.contains('delete-schedule')) {
                     const selectedIndex = event.target.getAttribute('data-index');
+                    const countdownType = event.target.getAttribute('data-countdown_type');
                     if (selectedIndex !== null) {
                         const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
                         const selectedSchedule = savedSchedules[selectedIndex];
                         if (selectedSchedule && selectedSchedule.schedules) {
                             Swal.fire({
-                                title: 'Delete Schedule',
-                                text: "Are you sure you want to delete this schedule? This action cannot be undone.",
+                                title: `Delete ${countdownType}`,
+                                text: `Are you sure you want to delete this ${countdownType.toLowerCase()}? This action cannot be undone.`,
                                 icon: "warning",
                                 color: "#e1e1e1",
                                 focusDeny: true,
