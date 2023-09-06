@@ -33,9 +33,12 @@ function updateCountdown() {
             // Move to the next block (if available)
             currentBlockIndex++;
             if (currentBlockIndex >= blocks.length) {
-                document.getElementById("title").innerHTML = blocks[blocks.length-1].block;
+                document.getElementById("title").innerHTML = blocks[blocks.length - 1].block;
                 document.getElementById("demo").innerText = ((blocks.length > 1) ? "Schedule Ended" : "Countdown Ended");
                 clearInterval(countdownInterval);
+                if ("wakeLock" in navigator) {
+                    wakeLock.release().then(() => { wakeLock = null })
+                };
                 return; // No more blocks, stop countdown
             }
             schoolStartDate = new ServerDate(blocks[currentBlockIndex].start_date).getTime();
