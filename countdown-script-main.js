@@ -48,8 +48,8 @@ function updateCountdown() {
         }
 
         // Update countdown display
-        document.getElementById("title").innerHTML = (((schoolStartDate-now) <= 100) ? ((countdownName.length > 20) ? (countdownName.substring(0, 20).replace(/\s\w+$/, "").trim() + "...") : countdownName) : blocks[currentBlockIndex].block);
-        document.getElementById("demo").innerText = (((schoolStartDate-now) <= 100) ? "Loading..." : formatDuration(timeRemaining));
+        document.getElementById("title").innerHTML = blocks[currentBlockIndex].block;
+        document.getElementById("demo").innerText = formatDuration(timeRemaining);
     } else {
         // Update countdown display
         document.getElementById("title").innerHTML = "Undefined Countdown";
