@@ -48,7 +48,7 @@ function updateCountdown() {
         }
 
         // Update countdown display
-        document.getElementById("title").innerHTML = (((schoolStartDate-now) <= 0) ? countdownName : blocks[currentBlockIndex].block);
+        document.getElementById("title").innerHTML = (((schoolStartDate-now) <= 0) ? ((countdownName.length > 20) ? (countdownName.substring(0, 20).replace(/\s\w+$/, "").trim() + "...") : countdownName) : blocks[currentBlockIndex].block);
         document.getElementById("demo").innerText = (((schoolStartDate-now) <= 0) ? "Loading..." : formatDuration(timeRemaining));
     } else {
         // Update countdown display
