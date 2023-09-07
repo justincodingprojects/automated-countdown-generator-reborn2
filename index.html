@@ -166,7 +166,7 @@
                         return response.text();
                     })
                     .then(data => {
-                        contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify({"name": ((schedules.length == 1) ? "Countdown" : "Schedule"), "schedules": schedules}));
+                        contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify({ "name": ((schedules.length == 1) ? "Countdown" : "Schedule"), "schedules": schedules }));
                     })
 
                 iframeClose.addEventListener("click", () => {
@@ -270,7 +270,7 @@
                     scheduleTile.innerHTML = `
                         <h3>${schedule.name || `Schedule ${index + 1}`}</h3>
                         <button class="btn btn-primary load-schedule" data-index="${index}" data-countdown_type="${countdownType}">Load ${countdownType}</button>
-                        <button class="btn btn-success run-schedule" data-index="${index}" data-countdown_type="${countdownType}">Run ${countdownType}</button>\
+                        ${(schedule.schedules.length == 1) ? `<button class="btn btn-success run-schedule" data-index="${index}" data-countdown_type="${countdownType}">Run ${countdownType}</button>` : `<div class="btn-group"><button class="btn btn-success run-schedule" data-index="${index}" data-countdown_type="${countdownType}">Run ${countdownType}</button><button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button><div class="dropdown-menu" data-index="${index}">${savedSchedules.schedules.map(item => `<a class="dropdown-item" href="#">${item.block}</a>`).join('')}</div></div>`}
                         <button class="btn btn-danger delete-schedule" data-index="${index}" data-countdown_type="${countdownType}">Delete ${countdownType}</button>
                     `;
                     savedSchedulesContainer.appendChild(scheduleTile);
@@ -380,6 +380,32 @@
                                 },
                                 allowOutsideClick: () => !Swal.isLoading()
                             })
+                        }
+                    }
+                } else if (event.target.classList.contains('dropdown-item')) {
+                    const selectedIndex = event.target.getAttribute('data-index');
+                    if (selectedIndex !== null) {
+                        const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
+                        const selectedSchedule = savedSchedules[selectedIndex];
+                        if (selectedSchedule && selectedSchedule.schedules) {
+                            // Run the schedule with the selected schedule data
+                            const iframeContainer = document.getElementById("iframeContainer");
+                            const contentIframe = document.getElementById("contentIframe");
+                            const iframeClose = document.getElementById("iframeClose");
+                            iframeContainer.style.display = "flex";
+                            fetch('./countdown.html')
+                                .then(response => {
+                                    return response.text();
+                                })
+                                .then(data => {
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify({ "name": selectedSchedule.name, "schedules": schedules[selectedIndex] }).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
+                                })
+
+                            iframeClose.addEventListener("click", () => {
+                                iframeContainer.style.display = "none";
+                                contentIframe.srcdoc = "";
+                            });
+                            console.log(JSON.stringify({ "name": selectedSchedule.name, "schedules": schedules[selectedIndex] }).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
                         }
                     }
                 }
