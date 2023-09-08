@@ -23,7 +23,7 @@ function updateCountdown() {
     if (blocks.length > 0) {
         var now = ServerDate.now();
         var schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
-        var timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000);
+        var timeRemaining = schoolStartDate - now
 
         // Check if the current countdown has ended
         if (timeRemaining <= 0) {
@@ -39,7 +39,7 @@ function updateCountdown() {
                 return; // No more blocks, stop countdown
             }
             schoolStartDate = new ServerDate(blocks[currentBlockIndex].start_date).getTime();
-            timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000);
+            timeRemaining = schoolStartDate - now
 
             // Show "Loading..." while transitioning to the next block
             document.getElementById("title").innerHTML = "Loading...";
