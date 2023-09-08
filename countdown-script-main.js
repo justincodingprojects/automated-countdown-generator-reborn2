@@ -10,11 +10,6 @@ function formatTime(time) {
     return String(time).padStart(2, "0");
 }
 
-function calculateCountdown(startTime) {
-    const now = Date.now();
-    return startTime - now;
-}
-
 function formatDuration(milliseconds) {
     const seconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -35,8 +30,8 @@ function updateCountdown() {
             // Move to the next block (if available)
             currentBlockIndex++;
             if (currentBlockIndex >= blocks.length) {
-                document.getElementById("title").innerHTML = blocks[blocks.length - 1].block;
-                document.getElementById("demo").innerText = ((blocks.length > 1) ? "Schedule Ended" : "Countdown Ended");
+                document.getElementById("title").innerHTML = "Schedule Ended";
+                document.getElementById("demo").innerText = "Countdown Ended";
                 clearInterval(countdownInterval);
                 /*if ("wakeLock" in navigator) {
                     wakeLock.release().then(() => { wakeLock = null })
@@ -45,6 +40,11 @@ function updateCountdown() {
             }
             schoolStartDate = new ServerDate(blocks[currentBlockIndex].start_date).getTime();
             timeRemaining = schoolStartDate - now + ((currentBlockIndex == (blocks.length) - 1) ? 0 : 1000);
+
+            // Show "Loading..." while transitioning to the next block
+            document.getElementById("title").innerHTML = "Loading...";
+            document.getElementById("demo").innerText = "";
+            return;
         }
 
         // Update countdown display
@@ -58,6 +58,7 @@ function updateCountdown() {
         return;
     }
 }
+
 
 // Initial countdown update
 var countdownInterval = setInterval(updateCountdown, 50);
