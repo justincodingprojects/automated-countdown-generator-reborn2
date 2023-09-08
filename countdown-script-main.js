@@ -28,8 +28,8 @@ function updateCountdown() {
             // Move to the next block (if available)
             currentBlockIndex++;
             if (currentBlockIndex >= blocks.length) {
-                document.getElementById("title").innerHTML = "Schedule Ended";
-                document.getElementById("demo").innerText = "Countdown Ended";
+                document.getElementById("title").innerHTML = blocks[blocks.length - 1].block;
+                document.getElementById("demo").innerText = ((blocks.length > 1) ? "Schedule Ended" : "Countdown Ended");
                 clearInterval(countdownInterval);
                 /*if ("wakeLock" in navigator) {
                     wakeLock.release().then(() => { wakeLock = null })
