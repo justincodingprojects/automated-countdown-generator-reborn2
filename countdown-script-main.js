@@ -65,12 +65,12 @@ function updateCountdown() {
         // Update countdown display
         document.getElementById("title").innerHTML = blocks[currentBlockIndex].block;
         document.getElementById("demo").innerText = formatDuration(timeRemaining);
-        document.getElementById("footera").innerText = formatUnixTime(blocks[currentBlockIndex].start_date.getTime());
+        document.getElementById("footera").innerHTML = formatUnixTime(blocks[currentBlockIndex].start_date.getTime());
     } else {
         // Update countdown display
         document.getElementById("title").innerHTML = "Undefined " + ((data.length == 1) ? "Countdown" : "Schedule");
         document.getElementById("demo").innerText = ((data.length == 1) ? "Countdown" : "Schedule") + " Ended";
-        document.getElementById("footera").innerText = "Timer until you can't no more";
+        document.getElementById("footera").innerHTML = "Timer until you can't no more";
         clearInterval(countdownInterval);
         return;
     }
