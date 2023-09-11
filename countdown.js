@@ -59,6 +59,7 @@ function updateCountdown() {
             // Show "Loading..." while transitioning to the next block
             document.getElementById("title").innerHTML = ((data.length == 1) ? "Countdown" : "Schedule");
             document.getElementById("demo").innerText = "Loading...";
+            document.getElementById("footera").innerHTML = "Loading Timer...";
             return;
         }
 
