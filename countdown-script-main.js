@@ -17,6 +17,23 @@ function formatDuration(milliseconds) {
     return `${formatTime(days)}d ${formatTime(hours % 24)}h ${formatTime(minutes % 60)}m ${formatTime(seconds % 60)}s`;
 }
 
+function formatUnixTime(unixTime) {
+    const date = new Date(unixTime);
+  
+    const formattedDate = date.toLocaleString(undefined, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true,
+    }).replace(" at ", " @ ");
+  
+    return `Timer until ${formattedDate}`;
+  }
+
 function updateCountdown() {
     if (blocks.length > 0) {
         var now = ServerDate.now();
@@ -48,10 +65,12 @@ function updateCountdown() {
         // Update countdown display
         document.getElementById("title").innerHTML = blocks[currentBlockIndex].block;
         document.getElementById("demo").innerText = formatDuration(timeRemaining);
+        document.getElementById("footera").innerText = formatUnixTime(blocks[currentBlockIndex].start_date.getTime());
     } else {
         // Update countdown display
-        document.getElementById("title").innerHTML = "Undefined Countdown";
-        document.getElementById("demo").innerText = "Countdown Ended";
+        document.getElementById("title").innerHTML = "Undefined " + ((data.length == 1) ? "Countdown" : "Schedule");
+        document.getElementById("demo").innerText = ((data.length == 1) ? "Countdown" : "Schedule") + " Ended";
+        document.getElementById("footera").innerText = "Timer until you can't no more";
         clearInterval(countdownInterval);
         return;
     }
