@@ -3,6 +3,7 @@
 
 Automated Countdown Generator is a web application that allows users to create custom countdowns based on their selected schedule. Whether you're counting down to an important event, a project deadline, or any other milestone, this tool makes it easy and automated.
 
+# Why REBORN?
 **R** eturn of<br/><br/>
 **E** xcitement<br/><br/>
 **B** efore<br/><br/>
