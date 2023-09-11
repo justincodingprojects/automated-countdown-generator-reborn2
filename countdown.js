@@ -53,7 +53,7 @@ function updateCountdown() {
                 };*/
                 return; // No more blocks, stop countdown
             }
-            schoolStartDate = new ServerDate(blocks[currentBlockIndex].start_date).getTime();
+            schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
             timeRemaining = schoolStartDate - now
 
             // Show "Loading..." while transitioning to the next block
@@ -65,7 +65,7 @@ function updateCountdown() {
         // Update countdown display
         document.getElementById("title").innerHTML = blocks[currentBlockIndex].block;
         document.getElementById("demo").innerText = formatDuration(timeRemaining);
-        document.getElementById("footera").innerHTML = formatUnixTime(blocks[currentBlockIndex].start_date.getTime());
+        document.getElementById("footera").innerHTML = formatUnixTime(new Date(blocks[currentBlockIndex].start_date).getTime());
     } else {
         // Update countdown display
         document.getElementById("title").innerHTML = "Undefined " + ((data.length == 1) ? "Countdown" : "Schedule");
