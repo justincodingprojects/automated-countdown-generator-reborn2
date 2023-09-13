@@ -95,9 +95,13 @@ button {
 }
 
 .container {
-    position: relative;
+    position: fixed;
     width: max-content;
     margin: 0 auto;
+    margin-bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
 }
 
 .footer {
