@@ -98,8 +98,8 @@ button {
     background-color: #444444;
     position: fixed;
     top: 93.3%;
-    left: 33%;
-    right: 33%;
+    /*left: 33%;
+    right: 33%;*/
     overflow: hidden;
     text-align: center;
 }
