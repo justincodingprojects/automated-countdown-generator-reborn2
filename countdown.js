@@ -103,7 +103,7 @@ new Egg("m", function () {
         locked = true;
         zoomed = true;
         $(".topnav").animate({ top: "-10%" });
-        $(".footer").animate({ marginBottom: "-45px" });
+        $(".footer").animate({ marginBottom: "-100px" });
         $("#title").animate({ fontSize: "750%", top: "40%" });
         $("#demo").animate({ fontSize: "750%", top: "65%" }, "", () => locked = false);
     } else if (!locked) {
