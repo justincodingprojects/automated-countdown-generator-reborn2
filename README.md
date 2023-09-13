@@ -8,6 +8,7 @@ Automated Countdown Generator is a web application that allows users to create c
 **E** xcitement<br/><br/>
 **B** efore<br/><br/>
 **O** ur<br/><br/>
+**R** emarkable<br></br>
 **N** ext Thing
 
 ## Features
