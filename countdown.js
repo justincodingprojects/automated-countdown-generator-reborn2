@@ -103,14 +103,14 @@ new Egg("m", function () {
         locked = true;
         zoomed = true;
         $(".topnav").animate({ top: "-10%" });
-        $(".footer").animate({ marginBottom: "-100px" });
+        $(".footer").animate({ bottom: "-45px" });
         $("#title").animate({ fontSize: "750%", top: "40%" });
         $("#demo").animate({ fontSize: "750%", top: "65%" }, "", () => locked = false);
     } else if (!locked) {
         locked = true;
         zoomed = false;
         $(".topnav").animate({ top: "1.3%" });
-        $(".footer").animate({ marginBottom: "0px" });
+        $(".footer").animate({ bottom: "0px" });
         $("#title").animate({ fontSize: "375%", top: "45%" });
         $("#demo").animate({ fontSize: "375%", top: "58%" }, "", () => locked = false);
     }
