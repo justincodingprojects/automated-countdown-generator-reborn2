@@ -402,7 +402,7 @@
                                     return response.text();
                                 })
                                 .then(data => {
-                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule.schedules[innerIndex]).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify([{"name": event.target.innerText, "schedules" : selectedSchedule.schedules[innerIndex]}]).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
                                 })
 
                             iframeClose.addEventListener("click", () => {
