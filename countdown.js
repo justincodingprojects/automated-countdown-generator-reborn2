@@ -47,6 +47,7 @@ function updateCountdown() {
             if (currentBlockIndex >= blocks.length) {
                 document.getElementById("title").innerHTML = blocks[blocks.length - 1].block;
                 document.getElementById("demo").innerText = ((blocks.length > 1) ? "Schedule Ended" : "Countdown Ended");
+                document.getElementById("footera").innerHTML = formatUnixTime(new Date(blocks[blocks.length - 1].start_date).getTime());
                 clearInterval(countdownInterval);
                 /*if ("wakeLock" in navigator) {
                     wakeLock.release().then(() => { wakeLock = null })
