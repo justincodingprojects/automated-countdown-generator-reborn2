@@ -393,7 +393,7 @@
                         const selectedSchedule = savedSchedules[selectedIndex];
                         if (selectedSchedule && selectedSchedule.schedules) {
                             const schedules = [];
-                            const block = selectedSchedule.name;
+                            const block = selectedSchedule.schedules[innerIndex].name;
                             const start_date = selectedSchedule.schedules[innerIndex].start_date;
                             schedules.push({ block, start_date });
                             // Run the schedule with the selected schedule data
