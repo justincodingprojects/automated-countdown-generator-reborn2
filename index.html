@@ -273,7 +273,7 @@
                         <button class="btn btn-primary load-schedule" data-index="${index}" data-countdown_type="${countdownType}">Load ${countdownType}</button>
                         ${(countdownType == "Schedule") ? '<div class="btn-group">' : ''}
                         <button class="btn btn-success run-schedule" data-index="${index}" data-countdown_type="${countdownType}">Run ${countdownType}</button>
-                        ${(countdownType == "Schedule") ? `<button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button><div class="dropdown-menu">${savedSchedules[index].schedules.map(item => item.block).map(name => `<a class="dropdown-item" href="#">${name}</a>`).join('')}</div></div>` : ''}
+                        ${(countdownType == "Schedule") ? `<button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button><div class="dropdown-menu">${savedSchedules[index].schedules.map(item => item.block).map(name, innerIndex => `<div class="dropdown-item" data-main_index="${index}" data-index="${innerIndex}" style="cursor: pointer;">${name}</div>`).join('')}</div></div>` : ''}
                         <button class="btn btn-danger delete-schedule" data-index="${index}" data-countdown_type="${countdownType}">Delete ${countdownType}</button>
                     `;
                     savedSchedulesContainer.appendChild(scheduleTile);
@@ -383,6 +383,33 @@
                                 },
                                 allowOutsideClick: () => !Swal.isLoading()
                             })
+                        }
+                    }
+                } else if (event.target.classList.contains('dropdown-item')) {
+                    const selectedIndex = event.target.getAttribute('data-main_index');
+                    const innerIndex = event.target.getAttribute('data-index');
+                    if (selectedIndex !== null) {
+                        const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
+                        const selectedSchedule = savedSchedules[selectedIndex];
+                        if (selectedSchedule && selectedSchedule.schedules) {
+                            // Run the schedule with the selected schedule data
+                            const iframeContainer = document.getElementById("iframeContainer");
+                            const contentIframe = document.getElementById("contentIframe");
+                            const iframeClose = document.getElementById("iframeClose");
+                            iframeContainer.style.display = "flex";
+                            fetch('./countdown.html')
+                                .then(response => {
+                                    return response.text();
+                                })
+                                .then(data => {
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(selectedSchedule.schedules[innerIndex]).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
+                                })
+
+                            iframeClose.addEventListener("click", () => {
+                                iframeContainer.style.display = "none";
+                                contentIframe.srcdoc = "";
+                            });
+                            console.log(JSON.stringify(selectedSchedule.schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
                         }
                     }
                 }
