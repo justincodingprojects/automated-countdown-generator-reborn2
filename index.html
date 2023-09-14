@@ -392,6 +392,10 @@
                         const savedSchedules = JSON.parse(localStorage.getItem('savedSchedules')) || [];
                         const selectedSchedule = savedSchedules[selectedIndex];
                         if (selectedSchedule && selectedSchedule.schedules) {
+                            const schedules = [];
+                            const block = selectedSchedule.name;
+                            const start_date = selectedSchedule.schedules[innerIndex].start_date;
+                            schedules.push({ block, start_date });
                             // Run the schedule with the selected schedule data
                             const iframeContainer = document.getElementById("iframeContainer");
                             const contentIframe = document.getElementById("contentIframe");
@@ -402,7 +406,7 @@
                                     return response.text();
                                 })
                                 .then(data => {
-                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify([{"name": event.target.innerText, "schedules" : selectedSchedule.schedules[innerIndex]}]).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
+                                    contentIframe.srcdoc = data.replace("\"\" // BLOCK_DATA", JSON.stringify(schedules).replaceAll("[DATE]", `${new Date(new Date().toLocaleDateString()).toISOString().split('T')[0]}`));
                                 })
 
                             iframeClose.addEventListener("click", () => {
