@@ -271,7 +271,9 @@
                     scheduleTile.innerHTML = `
                         <h3>${schedule.name || `Schedule ${index + 1}`}</h3>
                         <button class="btn btn-primary load-schedule" data-index="${index}" data-countdown_type="${countdownType}">Load ${countdownType}</button>
+                        ${(countdownType == "Schedule") ? '<div class="btn-group">' : ''}
                         <button class="btn btn-success run-schedule" data-index="${index}" data-countdown_type="${countdownType}">Run ${countdownType}</button>
+                        ${(countdownType == "Schedule") ? `<button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button><div class="dropdown-menu">${savedSchedules[index].schedules.map(item => item.block).map(name => `<a class="dropdown-item" href="#">${name}</a>`).join('')}</div></div>` : ''}
                         <button class="btn btn-danger delete-schedule" data-index="${index}" data-countdown_type="${countdownType}">Delete ${countdownType}</button>
                     `;
                     savedSchedulesContainer.appendChild(scheduleTile);
