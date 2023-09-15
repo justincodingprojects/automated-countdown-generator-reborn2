@@ -139,7 +139,7 @@
             <label for="name-${scheduleCount}">Name</label>
             <input type="text" id="name-${scheduleCount}" class="form-control" required>
             <label for="time-${scheduleCount}">Time</label>
-            <input type="time" id="time-${scheduleCount}" class="form-control" required>
+            <input type="time" step="1" id="time-${scheduleCount}" class="form-control" required>
         `;
                 scheduleInputsContainer.appendChild(scheduleInput);
                 scheduleCount++;
