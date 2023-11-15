@@ -5,6 +5,24 @@ var offset = 0;
 // Load JSON data and create dropdowns
 blocks = data
 
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
+
 function formatTime(time) {
     return String(time).padStart(2, "0");
 }
@@ -123,13 +141,13 @@ new Egg("o", function () {
     if(offsetPrompt.includes("+") || offsetPrompt.includes("-")) {
         if(offsetPrompt.split("+").length === 2 || offsetPrompt.split("-").length === 2) {
             offset = offset + parseInt(offsetPrompt);
-            alert(`Successfuly offset time by ${offsetPrompt} milliseconds!`)
+            toastr.success(`Successfuly offset time by ${offsetPrompt} milliseconds!`, "Offset Set");
         } else if(!offsetPrompt.includes("+") && !offsetPrompt.includes("-")) {
-            alert("Error setting offset: Not a valid offset.")
+            toastr.error("Error setting offset: Not a valid offset.", "Offset Error");
         } else {
-            alert("Error setting offset: Not a valid offset.")
+            toastr.error("Error setting offset: Not a valid offset.", "Offset Error");
         }
     } else {
-        alert("Error setting offset: Not a valid offset.")
+        toastr.error("Error setting offset: Not a valid offset.", "Offset Error");
     }
 }).listen();
