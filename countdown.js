@@ -1,5 +1,6 @@
 var blocks = []; // Store the blocks data from JSON
 var currentBlockIndex = 0; // Index of the currently selected block
+var offset = 0;
 
 // Load JSON data and create dropdowns
 blocks = data
@@ -38,7 +39,7 @@ function updateCountdown() {
     if (blocks.length > 0) {
         var now = ServerDate.now();
         var schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
-        var timeRemaining = schoolStartDate - now
+        var timeRemaining = schoolStartDate - now + offset
 
         // Check if the current countdown has ended
         if (timeRemaining <= 0) {
@@ -55,7 +56,7 @@ function updateCountdown() {
                 return; // No more blocks, stop countdown
             }
             schoolStartDate = new Date(blocks[currentBlockIndex].start_date).getTime();
-            timeRemaining = schoolStartDate - now
+            timeRemaining = schoolStartDate - now + offset
 
             // Show "Loading..." while transitioning to the next block
             document.getElementById("title").innerHTML = ((data.length == 1) ? "Countdown" : "Schedule");
@@ -114,5 +115,21 @@ new Egg("m", function () {
         $(".footer").animate({ bottom: "0px" });
         $("#title").animate({ fontSize: "375%", top: "45%" });
         $("#demo").animate({ fontSize: "375%", top: "58%" }, "", () => locked = false);
+    }
+}).listen();
+
+new Egg("o", function () {
+    var offsetPrompt = prompt("How much offset in milliseconds? (Use + or -)")
+    if(offsetPrompt.includes("+") || offsetPrompt.includes("-")) {
+        if(offsetPrompt.split("+").length === 2 || offsetPrompt.split("-").length === 2) {
+            offset = offset + parseInt(offsetPrompt);
+            alert(`Successfuly offset time by ${offsetPrompt} milliseconds!`)
+        } else if(!offsetPrompt.includes("+") && !offsetPrompt.includes("-")) {
+            alert("Error setting offset: Not a valid offset.")
+        } else {
+            alert("Error setting offset: Not a valid offset.")
+        }
+    } else {
+        alert("Error setting offset: Not a valid offset.")
     }
 }).listen();
