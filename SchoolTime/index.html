@@ -207,6 +207,9 @@ function monthName(i) {
 function applySettings(school, mono, eventType, delay) {
   timeDelay = delay;
   var date = new Date();
+  if (eventType == "midtermday2") {
+    if (school == "lehigh") {selectedEvents = lehighSeniorMidtermDay2;}
+  }
   if (mono) {
     document.getElementById("time").style.fontFamily = "Roboto Mono, monospace";
     document.getElementById("date").style.fontFamily = "Roboto Mono, monospace";
