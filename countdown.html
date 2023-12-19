@@ -46,7 +46,7 @@
                         a.setAttribute("class", "active")
                         document.getElementsByClassName("topnav")[0].appendChild(a)
                         //fetch("https://raw.githubusercontent.com/justincodingprojects/automated-countdown-generator/main/acgconfig/Maintenance-Banner-Text/maintenancebannertext.txt?t=" + Math.random(), { cache: "no-store" }).then((r) => r.text().then((t) => document.getElementById("mainbanner").innerHTML = t));
-                        document.getElementById("mainbanner").innerHTML = (new Date().getDate() >= 16) ? "Welcome to the 3 Year Anniversary of ACG :O" : "This countdown has been reborn. You're welcome!";
+                        document.getElementById("mainbanner").innerHTML = /*(new Date().getDate() >= 16) ? "Welcome to the 3 Year Anniversary of ACG :O" : */"It's been too long, something's brewing up in the mix...";
                     }, 50)
                 }
             } else if (bool == false) {
