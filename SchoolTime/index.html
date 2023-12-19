@@ -414,7 +414,7 @@ function applySettings(school, mono, eventType, delay) {
   e.textContent = '';
   if (selectedEvents.length % 2 == 1) {
     for (var i = 0; i < selectedEvents.length - 4; i = i + 2) {
-      var t = document.createTextNode(selectedEvents[i + 2].name + ": " + (((fixHour(selectedEvents[i + 2].time.getHours()) == 0) ? fixHour(selectedEvents[i + 2].time.getHours()) + ":" : "")) + fixTime(selectedEvents[i + 2].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 3].time.getHours()) + ":" + fixTime(selectedEvents[i + 3].time.getMinutes()));
+      var t = document.createTextNode(selectedEvents[i + 2].name + ": " + fixHour(selectedEvents[i + 2].time.getHours()) + ":" + fixTime(selectedEvents[i + 2].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 3].time.getHours()) + ":" + fixTime(selectedEvents[i + 3].time.getMinutes()));
       var br = document.createElement("br");
       e.appendChild(t);
       e.appendChild(br);
@@ -422,7 +422,7 @@ function applySettings(school, mono, eventType, delay) {
   }
   else {
     for (var i = 0; i < selectedEvents.length - 2; i = i + 2) {
-      var t = document.createTextNode(selectedEvents[i + 1].name + ": " + (((fixHour(selectedEvents[i + 1].time.getHours()) == 0) ? fixHour(selectedEvents[i + 1].time.getHours()) + ":" : "")) + fixTime(selectedEvents[i + 1].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 2].time.getHours()) + ":" + fixTime(selectedEvents[i + 2].time.getMinutes()));
+      var t = document.createTextNode(selectedEvents[i + 1].name + ": " + fixHour(selectedEvents[i + 1].time.getHours()) + ":" + fixTime(selectedEvents[i + 1].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 2].time.getHours()) + ":" + fixTime(selectedEvents[i + 2].time.getMinutes()));
       var br = document.createElement("br");
       e.appendChild(t);
       e.appendChild(br);
