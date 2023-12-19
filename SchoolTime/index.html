@@ -312,7 +312,7 @@ function getCurrentEvent(events, time) {
   return (i - 2);
 }
 function setTime() {
-  var date = new Date();
+  var date = new ServerDate();
   if (selectedEvents == lehighSeniorMidtermDay2) {selectedEvents == lehighSeniorMidtermDay2;}
   else if (selectedEvents == woodPeriodsNormal && date.getDay() == 3) {selectedEvents == woodPeriodsWednesday;}
   else if (selectedEvents == woodPeriodsWednesday && date.getDay() != 3) {selectedEvents == woodPeriodsNormal;}
