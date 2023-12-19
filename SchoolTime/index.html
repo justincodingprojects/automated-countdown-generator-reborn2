@@ -330,10 +330,10 @@ function setTime() {
   month = monthName(month);
   document.getElementById('period').innerHTML = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate)].name;
   if (timeDifference.getDate() < 31) {
-  document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + (((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) == 0) ? (timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) + ":" : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
+  document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + (timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) + ":" + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
   }
   else if (timeDifference.getHours() > 18) {
-  document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + (((timeDifference.getHours() - 19) == 0) ? (timeDifference.getHours() - 19) + ":" : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
+  document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + (timeDifference.getHours() - 19) + ":" + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
   }
   else {
   document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + timeDifference.getMinutes() + ":" + fixTime(timeDifference.getSeconds());
