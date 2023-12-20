@@ -332,6 +332,8 @@
       applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250), ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0));
       document.getElementById("dark").checked = ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false);
       document.getElementById("mono").checked = ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false);
+      document.getElementById("timeDelay").value = ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250);
+      document.getElementById("offset").value = ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0);
       setTime();
       wakeLock();
       // alertBox("");
