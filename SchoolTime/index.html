@@ -136,7 +136,7 @@
     </select>
     <label for="eventType">Schedule:</label>
     <select name="eventType" id="eventType">
-      <option value="midtermday3">Midterm Day (12/20)</option>
+      <option value="midtermday4">Midterm Day (12/21)</option>
       <option value="normal">Normal</option>
       <option value="2hrearly">2 Hour Early Out</option>
       <option value="2hrlate">2 Hour Late Start</option>
@@ -312,24 +312,24 @@
       { name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0) },
       { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
     ];
-    const lehighSeniorMidtermDay3 = [
+    const lehighSeniorMidtermDay4 = [
       { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
       { name: "Start of Day", time: new Date(2000, 1, 1, 6, 30, 0, 0) },
       { name: "Rotation", time: new Date(2000, 1, 1, 6, 50, 0, 0) },
-      { name: "2nd Period", time: new Date(2000, 1, 1, 7, 5, 0, 0) },
+      { name: "1st Period", time: new Date(2000, 1, 1, 7, 5, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 7, 51, 0, 0) },
+      { name: "2nd Period", time: new Date(2000, 1, 1, 7, 56, 0, 0) },
       { name: "Rotation", time: new Date(2000, 1, 1, 8, 42, 0, 0) },
       { name: "3rd Period", time: new Date(2000, 1, 1, 8, 47, 0, 0) },
-      { name: "Rotation", time: new Date(2000, 1, 1, 9, 33, 0, 0) },
-      { name: "4th Period", time: new Date(2000, 1, 1, 9, 38, 0, 0) },
       { name: "Rotation", time: new Date(2000, 1, 1, 10, 24, 0, 0) },
       { name: "5th Period", time: new Date(2000, 1, 1, 10, 29, 0, 0) },
       { name: "Rotation", time: new Date(2000, 1, 1, 11, 53, 0, 0) },
-      { name: "6th Period", time: new Date(2000, 1, 1, 11, 58, 0, 0) },
+      { name: "7th Period", time: new Date(2000, 1, 1, 11, 58, 0, 0) },
       { name: "School has ended.", time: new Date(2000, 1, 1, 13, 35, 0, 0) },
       { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
     ];
     function load() {
-      applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250), ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0));
+      applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday4"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250), ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0));
       document.getElementById("dark").checked = ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false);
       document.getElementById("mono").checked = ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false);
       document.getElementById("timeDelay").value = ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250);
@@ -347,7 +347,7 @@
     }
     function setTime() {
       var date = new ServerDate();
-      if (selectedEvents == lehighSeniorMidtermDay3) { selectedEvents == lehighSeniorMidtermDay3; }
+      if (selectedEvents == lehighSeniorMidtermDay4) { selectedEvents == lehighSeniorMidtermDay4; }
       else if (selectedEvents == woodPeriodsNormal && date.getDay() == 3) { selectedEvents == woodPeriodsWednesday; }
       else if (selectedEvents == woodPeriodsWednesday && date.getDay() != 3) { selectedEvents == woodPeriodsNormal; }
       else if (selectedEvents == northBlocksNormal && date.getDay() == 3) { selectedEvents == northBlocksWednesday; }
@@ -414,8 +414,8 @@
       timeDelay = delay;
       timeOffset = offset;
       var date = new Date();
-      if (eventType == "midtermday3") {
-        if (school == "lehigh") { selectedEvents = lehighSeniorMidtermDay3; }
+      if (eventType == "midtermday4") {
+        if (school == "lehigh") { selectedEvents = lehighSeniorMidtermDay4; }
       }
       if (eventType == "normal") {
         if (school == "wood" && date.getDay() == 3) { selectedEvents = woodPeriodsWednesday; }
