@@ -328,6 +328,8 @@
     ];
     function load() {
       applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250));
+      document.getElementById("dark").checked = ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false);
+      ldocument.getElementById("mono").checked = ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false);
       setTime();
       wakeLock();
       // alertBox("");
