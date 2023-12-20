@@ -475,6 +475,7 @@
       }
     }
     function applyButton() {
+      settingsMenu(true);
       applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value, document.getElementById("offset").value);
       localStorage.setItem("school", document.getElementById("school").value);
       localStorage.setItem("dark", document.getElementById("dark").checked);
@@ -497,17 +498,17 @@
         e.style.display = 'none';
       }
     }
-    function settingsMenu() {
+    function settingsMenu(onlyClose) {
       var e = document.getElementById("settingsBar");
       if (window.getComputedStyle(e).getPropertyValue('display') == 'none') {
-        e.style.display = 'inline';
+        if (!onlyClose) e.style.display = 'inline';
       }
       else {
         e.style.display = 'none';
       }
     }
     function editor() {
-      settingsMenu();
+      settingsMenu(false);
       document.body.style.overflow = 'visible';
       document.getElementById("bottomBar").id = "";
     }
