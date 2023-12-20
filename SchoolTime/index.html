@@ -321,7 +321,7 @@ function setTime() {
   var timeNoDate = new Date();
   timeNoDate.setFullYear(2000);
   timeNoDate.setMonth(1, 1);
-  const timeDifference = new Date(selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].time - timeNoDate);
+  const timeDifference = new Date((selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].time - timeNoDate) + (ServerDate - new Date()));
   var hour = date.getHours();
   var min = date.getMinutes();
   var sec = date.getSeconds();
