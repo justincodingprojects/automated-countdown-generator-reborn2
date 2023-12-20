@@ -106,7 +106,7 @@ input {height: 24px;}
 </select>
 <label for="eventType">Schedule:</label>
 <select name="eventType" id="eventType">
-  <option value="midtermday2">Midterm Day (12/19)</option>
+  <option value="midtermday3">Midterm Day (12/20)</option>
   <option value="normal">Normal</option>
   <option value="2hrearly">2 Hour Early Out</option>
   <option value="2hrlate">2 Hour Late Start</option>
@@ -282,24 +282,24 @@ const northBlocks2hrLate = [
 {name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0)},
 {name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
 ];
-const lehighSeniorMidtermDay2 = [
+const lehighSeniorMidtermDay3 = [
 {name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
 {name: "Start of Day", time: new Date(2000, 1, 1, 6, 30, 0, 0)},
 {name: "Rotation", time: new Date(2000, 1, 1, 6, 50, 0, 0)},
-{name: "1st Period", time: new Date(2000, 1, 1, 7, 5, 0, 0)},
+{name: "2nd Period", time: new Date(2000, 1, 1, 7, 5, 0, 0)},
 {name: "Rotation", time: new Date(2000, 1, 1, 8, 42, 0, 0)},
 {name: "3rd Period", time: new Date(2000, 1, 1, 8, 47, 0, 0)},
 {name: "Rotation", time: new Date(2000, 1, 1, 9, 33, 0, 0)},
 {name: "4th Period", time: new Date(2000, 1, 1, 9, 38, 0, 0)},
 {name: "Rotation", time: new Date(2000, 1, 1, 10, 24, 0, 0)},
 {name: "5th Period", time: new Date(2000, 1, 1, 10, 29, 0, 0)},
-{name: "Rotation", time: new Date(2000, 1, 1, 12, 44, 0, 0)},
-{name: "7th Period", time: new Date(2000, 1, 1, 12, 49, 0, 0)},
+{name: "Rotation", time: new Date(2000, 1, 1, 11, 53, 0, 0)},
+{name: "6th Period", time: new Date(2000, 1, 1, 11, 58, 0, 0)},
 {name: "School has ended.", time: new Date(2000, 1, 1, 13, 35, 0, 0)},
 {name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
 ];
 function load() {
-  applySettings("lehigh", false, "midtermday2", 250);
+  applySettings("lehigh", false, "midtermday3", 250);
   setTime();
   wakeLock();
   // alertBox("");
@@ -313,7 +313,7 @@ function getCurrentEvent(events, time) {
 }
 function setTime() {
   var date = new ServerDate();
-  if (selectedEvents == lehighSeniorMidtermDay2) {selectedEvents == lehighSeniorMidtermDay2;}
+  if (selectedEvents == lehighSeniorMidtermDay3) {selectedEvents == lehighSeniorMidtermDay3;}
   else if (selectedEvents == woodPeriodsNormal && date.getDay() == 3) {selectedEvents == woodPeriodsWednesday;}
   else if (selectedEvents == woodPeriodsWednesday && date.getDay() != 3) {selectedEvents == woodPeriodsNormal;}
   else if (selectedEvents == northBlocksNormal && date.getDay() == 3) {selectedEvents == northBlocksWednesday;}
@@ -378,8 +378,8 @@ function monthName(i) {
 function applySettings(school, mono, eventType, delay) {
   timeDelay = delay;
   var date = new Date();
-  if (eventType == "midtermday2") {
-    if (school == "lehigh") {selectedEvents = lehighSeniorMidtermDay2;}
+  if (eventType == "midtermday3") {
+    if (school == "lehigh") {selectedEvents = lehighSeniorMidtermDay3;}
   }
   if (eventType == "normal") {
     if (school == "wood" && date.getDay() == 3) {selectedEvents = woodPeriodsWednesday;}
