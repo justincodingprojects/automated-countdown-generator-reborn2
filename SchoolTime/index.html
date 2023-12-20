@@ -353,7 +353,7 @@
       var timeNoDate = new Date();
       timeNoDate.setFullYear(2000);
       timeNoDate.setMonth(1, 1);
-      timeNoDate = new Date(timeNoDate.getTime() + (ServerDate - new Date()) + timeOffset);
+      timeNoDate = new Date(timeNoDate.getTime() + (ServerDate - new Date()) + parseInt(timeOffset));
       const timeDifference = new Date(selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].time - timeNoDate);
       var hour = date.getHours();
       var min = date.getMinutes();
