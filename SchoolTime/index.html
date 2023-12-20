@@ -1,508 +1,535 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>School Time</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-<link rel="shortcut icon" type="image/png" href="icon.png">
-<script id="ServerDate" src="../ServerDate.js"></script>
-<style>
-body, select, button {
-  font-family: 'Montserrat', sans-serif;
-  text-align: center;
-  font-size: 22px;
-}
-body {
-  height: 100vh;
-  overflow: hidden;
-}
-h1, #br {font-size:128px;}
-h2 {font-size: 32px;}
-#bottomBar {
-  background-color: black;
-  color: white;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  text-align: left;
-  padding: 8px;
-}
-#sideBar {
-  background-color: rgba(50, 50, 50, 0.75);
-  color: white;
-  font-size: 32px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 460px;
-  text-align: left;
-  padding: 16px;
-  display: none;
-}
-#settingsBar {
-  background-color: rgba(50, 50, 50, 0.5);
-  color: white;
-  font-size: 32px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 460px;
-  text-align: left;
-  padding: 16px;
-  display: none;
-}
-input {height: 24px;}
-#mono, #dark {width: 24px;}
-#bottomButton {
-  float: right;
-  margin-right: 16px;
-}
-#alert {
-  position: absolute;
-  margin: auto;
-  padding: 16px;
-  left: 0;
-  right: 0;
-  font-size: 32px;
-  border-style: solid;
-  visibility: hidden;
-  background-color: white;
-}
-#alertHeader {
-  font-weight: bold;
-  font-size: 48px;
-}
-#okButton {
-  right: 50%;
-}
-</style>
-</head>
-<body onload="load()">
-<div id="alert">
-<span id="alertHeader">Info</span><br>
-<span id="alertContent"></span><br>
-<button type="button" id="okButton" onclick="inforead()">Ok</button>
-</div>
-<br id="br">
-<h1 id="time">Loading...</h1>
-<h2 id="date">Loading...</h2>
-<h2 id="period">Loading...</h2>
-<h2 id="countdown">Loading...</h2>
-<div id="settingsBar">
-  <label for="dark">Dark Mode</label>
-  <input type="checkbox" id="dark" name="dark"><br>
-  <label for="mono">Use Monospace Font?</label>
-  <input type="checkbox" id="mono" name="mono">
-  <label for="timeDelay">Delay between updates (in ms):</label>
-  <input type="number" id="timeDelay" name="timeDelay" value="250"><br>
-  <button type="button" onclick="editor()">Editor Mode</button>
-</div>
-<div id="sideBar"></div>
-<div id="bottomBar">
-<label for="school">School:</label>
-<select name="school" id="school">
-  <option value="lehigh">Lehigh Senior High</option>
-  <option value="wood">Wood Intermediate</option>
-  <option value="north">North High</option>
-</select>
-<label for="eventType">Schedule:</label>
-<select name="eventType" id="eventType">
-  <option value="midtermday3">Midterm Day (12/20)</option>
-  <option value="normal">Normal</option>
-  <option value="2hrearly">2 Hour Early Out</option>
-  <option value="2hrlate">2 Hour Late Start</option>
-  <option value="paws">Smart Block First</option>
-</select>
-<button type="button" id="bottomButton" onclick="applyButton()">Apply</button>
-<button type="button" id="bottomButton" onclick="getSchedule()">Schedule</button>
-<button type="button" id="bottomButton" onclick="displayMode()">Display Mode</button>
-<button type="button" id="bottomButton" onclick="settingsMenu()">More Settings</button>
-</div>
-<script>
-var selectedEvents, wakeLock, timeDelay;
 
-const unavailableEvents = [
-{name: "These events haven't been added yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const woodPeriodsNormal = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 6, 0, 0)},
-{name: "Advisory", time: new Date(2000, 1, 1, 9, 10, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 25, 0, 0)},
-{name: "1st Period", time: new Date(2000, 1, 1, 9, 28, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 11, 0, 0)},
-{name: "2nd Period", time: new Date(2000, 1, 1, 10, 14, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 57, 0, 0)},
-{name: "Verkstad", time: new Date(2000, 1, 1, 11, 0, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 30, 0, 0)},
-{name: "3rd Period", time: new Date(2000, 1, 1, 11, 33, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 12, 16, 0, 0)},
-{name: "4th Period", time: new Date(2000, 1, 1, 12, 19, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 39, 0, 0)},
-{name: "5th Period", time: new Date(2000, 1, 1, 13, 42, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 14, 26, 0, 0)},
-{name: "6th Period", time: new Date(2000, 1, 1, 14, 29, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 15, 13, 0, 0)},
-{name: "7th Period", time: new Date(2000, 1, 1, 15, 16, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 16, 0, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const woodPeriodsWednesday = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 6, 0, 0)},
-{name: "Advisory", time: new Date(2000, 1, 1, 9, 10, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 40, 0, 0)},
-{name: "1st Period", time: new Date(2000, 1, 1, 9, 43, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 19, 0, 0)},
-{name: "2nd Period", time: new Date(2000, 1, 1, 10, 22, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 58, 0, 0)},
-{name: "3rd Period", time: new Date(2000, 1, 1, 11, 1, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 37, 0, 0)},
-{name: "4th Period", time: new Date(2000, 1, 1, 11, 40, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 0, 0, 0)},
-{name: "5th Period", time: new Date(2000, 1, 1, 13, 3, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 40, 0, 0)},
-{name: "6th Period", time: new Date(2000, 1, 1, 13, 43, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 14, 20, 0, 0)},
-{name: "7th Period", time: new Date(2000, 1, 1, 14, 23, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 15, 0, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const woodPeriods2hrEarly = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 6, 0, 0)},
-{name: "Advisory", time: new Date(2000, 1, 1, 9, 10, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 28, 0, 0)},
-{name: "1st Period", time: new Date(2000, 1, 1, 9, 31, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 0, 0, 0)},
-{name: "2nd Period", time: new Date(2000, 1, 1, 10, 3, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 32, 0, 0)},
-{name: "5th Period", time: new Date(2000, 1, 1, 10, 35, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 5, 0, 0)},
-{name: "3rd Period", time: new Date(2000, 1, 1, 11, 8, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 37, 0, 0)},
-{name: "4th Period", time: new Date(2000, 1, 1, 11, 40, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 0, 0, 0)},
-{name: "6th Period", time: new Date(2000, 1, 1, 13, 3, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 30, 0, 0)},
-{name: "7th Period", time: new Date(2000, 1, 1, 13, 33, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 14, 0, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const woodPeriods2hrLate = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 6, 0, 0)},
-{name: "1st Period", time: new Date(2000, 1, 1, 11, 10, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 37, 0, 0)},
-{name: "3rd Period", time: new Date(2000, 1, 1, 11, 40, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 12, 17, 0, 0)},
-{name: "4th Period", time: new Date(2000, 1, 1, 12, 20, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 40, 0, 0)},
-{name: "2nd Period", time: new Date(2000, 1, 1, 13, 43, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 14, 14, 0, 0)},
-{name: "5th Period", time: new Date(2000, 1, 1, 14, 17, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 14, 49, 0, 0)},
-{name: "6th Period", time: new Date(2000, 1, 1, 14, 52, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 15, 24, 0, 0)},
-{name: "7th Period", time: new Date(2000, 1, 1, 15, 27, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 16, 0, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const northBlocksNormal = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0)},
-{name: "Block 1", time: new Date(2000, 1, 1, 8, 35, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 55, 0, 0)},
-{name: "Block 2", time: new Date(2000, 1, 1, 10, 0, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 20, 0, 0)},
-{name: "Block 3", time: new Date(2000, 1, 1, 11, 25, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 20, 0, 0)},
-{name: "Smart Block", time: new Date(2000, 1, 1, 13, 25, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 14, 0, 0, 0)},
-{name: "Block 4", time: new Date(2000, 1, 1, 14, 5, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const northBlocksWednesday = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0)},
-{name: "Block 1", time: new Date(2000, 1, 1, 8, 35, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 40, 0, 0)},
-{name: "Block 2", time: new Date(2000, 1, 1, 9, 45, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 50, 0, 0)},
-{name: "Block 3", time: new Date(2000, 1, 1, 10, 55, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 12, 50, 0, 0)},
-{name: "Smart Block", time: new Date(2000, 1, 1, 12, 55, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 20, 0, 0)},
-{name: "Block 4", time: new Date(2000, 1, 1, 13, 25, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 14, 30, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const northBlocksPaws = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0)},
-{name: "Smart Block", time: new Date(2000, 1, 1, 8, 35, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 10, 0, 0)},
-{name: "Block 1", time: new Date(2000, 1, 1, 9, 15, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 35, 0, 0)},
-{name: "Block 2", time: new Date(2000, 1, 1, 10, 40, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 12, 0, 0, 0)},
-{name: "Block 3", time: new Date(2000, 1, 1, 12, 5, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 14, 0, 0, 0)},
-{name: "Block 4", time: new Date(2000, 1, 1, 14, 5, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const northBlocks2hrEarly = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0)},
-{name: "Block 1", time: new Date(2000, 1, 1, 8, 35, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 9, 40, 0, 0)},
-{name: "Block 2", time: new Date(2000, 1, 1, 9, 45, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 10, 50, 0, 0)},
-{name: "Block 3", time: new Date(2000, 1, 1, 10, 55, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 55, 0, 0)},
-{name: "Block 4", time: new Date(2000, 1, 1, 12, 0, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 13, 0, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const northBlocks2hrLate = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Block 1", time: new Date(2000, 1, 1, 10, 35, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 11, 35, 0, 0)},
-{name: "Block 3", time: new Date(2000, 1, 1, 11, 40, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 13, 20, 0, 0)},
-{name: "Block 2", time: new Date(2000, 1, 1, 13, 25, 0, 0)},
-{name: "Passing Time", time: new Date(2000, 1, 1, 14, 25, 0, 0)},
-{name: "Block 4", time: new Date(2000, 1, 1, 14, 30, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-const lehighSeniorMidtermDay3 = [
-{name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0)},
-{name: "Start of Day", time: new Date(2000, 1, 1, 6, 30, 0, 0)},
-{name: "Rotation", time: new Date(2000, 1, 1, 6, 50, 0, 0)},
-{name: "2nd Period", time: new Date(2000, 1, 1, 7, 5, 0, 0)},
-{name: "Rotation", time: new Date(2000, 1, 1, 8, 42, 0, 0)},
-{name: "3rd Period", time: new Date(2000, 1, 1, 8, 47, 0, 0)},
-{name: "Rotation", time: new Date(2000, 1, 1, 9, 33, 0, 0)},
-{name: "4th Period", time: new Date(2000, 1, 1, 9, 38, 0, 0)},
-{name: "Rotation", time: new Date(2000, 1, 1, 10, 24, 0, 0)},
-{name: "5th Period", time: new Date(2000, 1, 1, 10, 29, 0, 0)},
-{name: "Rotation", time: new Date(2000, 1, 1, 11, 53, 0, 0)},
-{name: "6th Period", time: new Date(2000, 1, 1, 11, 58, 0, 0)},
-{name: "School has ended.", time: new Date(2000, 1, 1, 13, 35, 0, 0)},
-{name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
-];
-function load() {
-  applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? localStorage.getItem("dark") : false), ((localStorage.getItem("mono") !== null) ? localStorage.getItem("mono") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250));
-  setTime();
-  wakeLock();
-  // alertBox("");
-}
-function getCurrentEvent(events, time) {
-  var found = false;
-  for (var i = 0; i < events.length && !(found); i++) {
-    if (events[i].time.getTime() > time.getTime()) {found = true;}
-  }
-  return (i - 2);
-}
-function setTime() {
-  var date = new ServerDate();
-  if (selectedEvents == lehighSeniorMidtermDay3) {selectedEvents == lehighSeniorMidtermDay3;}
-  else if (selectedEvents == woodPeriodsNormal && date.getDay() == 3) {selectedEvents == woodPeriodsWednesday;}
-  else if (selectedEvents == woodPeriodsWednesday && date.getDay() != 3) {selectedEvents == woodPeriodsNormal;}
-  else if (selectedEvents == northBlocksNormal && date.getDay() == 3) {selectedEvents == northBlocksWednesday;}
-  else if (selectedEvents == northBlocksWednesday && date.getDay() != 3) {selectedEvents == northBlocksNormal;}
-  var timeNoDate = new Date();
-  timeNoDate.setFullYear(2000);
-  timeNoDate.setMonth(1, 1);
-  timeNoDate = new Date(timeNoDate.getTime() + (ServerDate - new Date()));
-  const timeDifference = new Date(selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].time - timeNoDate);
-  var hour = date.getHours();
-  var min = date.getMinutes();
-  var sec = date.getSeconds();
-  var year = date.getFullYear();
-  var month = date.getMonth();
-  var day = date.getDate();
-  month = monthName(month);
-  document.getElementById('period').innerHTML = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate)].name;
-  if (timeDifference.getDate() < 31) {
-  document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) !== 0 ? ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
-  }
-  else if (timeDifference.getHours() > 18) {
-  document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19) !== 0 ? ((timeDifference.getHours() - 19) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
-  }
-  else {
-  document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + timeDifference.getMinutes() + ":" + fixTime(timeDifference.getSeconds());
-  }
-  sec++;
-  if (sec == 60) {sec = 0; min++;}
-  if (min == 60) {min = 0; hour++;}
-  var ampm;
-  if (hour >= 12) {ampm = "PM";} else {ampm = "AM";}
-  hour = fixHour(hour);
-  min = fixTime(min);
-  sec = fixTime(sec);
-  document.getElementById('time').innerHTML = hour + ":" + min + ":" + sec + " " + ampm;
-  document.getElementById('date').innerHTML = month + " " + day + ", " + year;
-  setTimeout(setTime, timeDelay);
-}
-function fixTime(i) {
-  if (i < 10) {i = "0" + i;}
-  return i;
-}
-function fixHour(i) {
-  if (i >= 13) {i = i - 12;}
-  else if (i == 0) {i = 12;}
-  return i;
-}
-function monthName(i) {
-  if (i == 0) {i = "January";}
-  if (i == 1) {i = "February";}
-  if (i == 2) {i = "March";}
-  if (i == 3) {i = "April";}
-  if (i == 4) {i = "May";}
-  if (i == 5) {i = "June";}
-  if (i == 6) {i = "July";}
-  if (i == 7) {i = "August";}
-  if (i == 8) {i = "September";}
-  if (i == 9) {i = "October";}
-  if (i == 10) {i = "November";}
-  if (i == 11) {i = "December";}
-  return i;
-}
-function applySettings(school, dark, mono, eventType, delay) {
-  timeDelay = delay;
-  var date = new Date();
-  if (eventType == "midtermday3") {
-    if (school == "lehigh") {selectedEvents = lehighSeniorMidtermDay3;}
-  }
-  if (eventType == "normal") {
-    if (school == "wood" && date.getDay() == 3) {selectedEvents = woodPeriodsWednesday;}
-    else if (school == "wood") {selectedEvents = woodPeriodsNormal;}
-    else if (school == "north" && date.getDay() == 3) {selectedEvents = northBlocksWednesday;}
-    else if (school == "north") {selectedEvents = northBlocksNormal;}
-  }
-  if (eventType == "2hrlate") {
-    if (school == "wood") {selectedEvents = woodPeriods2hrLate;}
-    else if (school == "north") {selectedEvents = northBlocks2hrLate;}
-  }
-  if (eventType == "2hrearly") {
-    if (school == "wood") {selectedEvents = woodPeriods2hrEarly;}
-    else if (school == "north") {selectedEvents = northBlocks2hrEarly;}
-  }
-  if (eventType == "paws") {
-    if (school == "wood") {selectedEvents = woodPeriodsNormal;}
-    else if (school == "north") {selectedEvents = northBlocksPaws;}
-  }
-  if (mono) {
-    document.getElementById("time").style.fontFamily = "Roboto Mono, monospace";
-    document.getElementById("date").style.fontFamily = "Roboto Mono, monospace";
-    document.getElementById("period").style.fontFamily = "Roboto Mono, monospace";
-    document.getElementById("countdown").style.fontFamily = "Roboto Mono, monospace";
-  }
-  else {
-     document.getElementById("time").style.fontFamily = "Montserrat, sans-serif";
-    document.getElementById("date").style.fontFamily = "Montserrat, sans-serif";
-    document.getElementById("period").style.fontFamily = "Montserrat, sans-serif";
-    document.getElementById("countdown").style.fontFamily = "Montserrat, sans-serif";
-  }
-  if (dark) {
-    document.body.style.backgroundColor = "black";
-    document.body.style.color = "white";
-  }
-  else {
-    document.body.style.backgroundColor = "white";
-    document.body.style.color = "black";
-  }
-  var e = document.getElementById("sideBar");
-  e.textContent = '';
-  if (selectedEvents.length % 2 == 1) {
-    for (var i = 0; i < selectedEvents.length - 4; i = i + 2) {
-      var t = document.createTextNode(selectedEvents[i + 2].name + ": " + fixHour(selectedEvents[i + 2].time.getHours()) + ":" + fixTime(selectedEvents[i + 2].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 3].time.getHours()) + ":" + fixTime(selectedEvents[i + 3].time.getMinutes()));
-      var br = document.createElement("br");
-      e.appendChild(t);
-      e.appendChild(br);
+<head>
+  <title>School Time</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="icon.png">
+  <script id="ServerDate" src="../ServerDate.js"></script>
+  <style>
+    body,
+    select,
+    button {
+      font-family: 'Montserrat', sans-serif;
+      text-align: center;
+      font-size: 22px;
     }
-  }
-  else {
-    for (var i = 0; i < selectedEvents.length - 2; i = i + 2) {
-      var t = document.createTextNode(selectedEvents[i + 1].name + ": " + fixHour(selectedEvents[i + 1].time.getHours()) + ":" + fixTime(selectedEvents[i + 1].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 2].time.getHours()) + ":" + fixTime(selectedEvents[i + 2].time.getMinutes()));
-      var br = document.createElement("br");
-      e.appendChild(t);
-      e.appendChild(br);
+
+    body {
+      height: 100vh;
+      overflow: hidden;
     }
-  }
-}
-function applyButton() {
-  applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value);
-  localStorage.setItem("school", document.getElementById("school").value);
-  localStorage.setItem("dark", document.getElementById("dark").checked);
-  localStorage.setItem("mono", document.getElementById("mono").checked);
-  localStorage.setItem("eventtype", document.getElementById("eventType").value);
-  localStorage.setItem("timedelay", document.getElementById("timeDelay").value);
-}
-function displayMode() {
-  document.getElementById("bottomBar").style.display = 'none';
-  document.body.style.cursor = 'none';
-  document.documentElement.requestFullscreen();
-}
-function getSchedule() {
-  var e = document.getElementById("sideBar");
-  if (window.getComputedStyle(e).getPropertyValue('display') == 'none') {
-    e.style.display = 'inline';
-  }
-  else {
-    e.style.display = 'none';
-  }
-}
-function settingsMenu() {
-  var e = document.getElementById("settingsBar");
-  if (window.getComputedStyle(e).getPropertyValue('display') == 'none') {
-    e.style.display = 'inline';
-  }
-  else {
-    e.style.display = 'none';
-  }
-}
-function editor() {
-  settingsMenu();
-  document.body.style.overflow = 'visible';
-  document.getElementById("bottomBar").id = "";
-}
-function alertBox(text) {
-  document.getElementById("alert").style.visibility = 'visible';
-  document.getElementById("alertContent").innerHTML = text;
-}
-function inforead() {document.getElementById("alert").style.visibility = 'hidden'}
-document.addEventListener("keypress", function(e) {
-  document.getElementById("bottomBar").style.display = 'inline';
-  document.body.style.cursor = 'auto';
-  document.exitFullscreen();
-}, false);
-async function wakeLock() {
-  try {
-    wakeLock = await navigator.wakeLock.request('screen');
-  } catch (err) {
-    console.log(`${err.name}, ${err.message}`);
-  }
-}
-document.addEventListener('visibilitychange', async () => {
-  if (wakeLock !== null && document.visibilityState === 'visible') {
-    try {
-      wakeLock = await navigator.wakeLock.request('screen');
-    } catch (err) {
-      console.log(`${err.name}, ${err.message}`);
+
+    h1,
+    #br {
+      font-size: 128px;
     }
-  }
-});
-</script>
+
+    h2 {
+      font-size: 32px;
+    }
+
+    #bottomBar {
+      background-color: black;
+      color: white;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      text-align: left;
+      padding: 8px;
+    }
+
+    #sideBar {
+      background-color: rgba(50, 50, 50, 0.75);
+      color: white;
+      font-size: 32px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 460px;
+      text-align: left;
+      padding: 16px;
+      display: none;
+    }
+
+    #settingsBar {
+      background-color: rgba(50, 50, 50, 0.5);
+      color: white;
+      font-size: 32px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 460px;
+      text-align: left;
+      padding: 16px;
+      display: none;
+    }
+
+    input {
+      height: 24px;
+    }
+
+    #mono,
+    #dark {
+      width: 24px;
+    }
+
+    #bottomButton {
+      float: right;
+      margin-right: 16px;
+    }
+
+    #alert {
+      position: absolute;
+      margin: auto;
+      padding: 16px;
+      left: 0;
+      right: 0;
+      font-size: 32px;
+      border-style: solid;
+      visibility: hidden;
+      background-color: white;
+    }
+
+    #alertHeader {
+      font-weight: bold;
+      font-size: 48px;
+    }
+
+    #okButton {
+      right: 50%;
+    }
+  </style>
+</head>
+
+<body onload="load()">
+  <div id="alert">
+    <span id="alertHeader">Info</span><br>
+    <span id="alertContent"></span><br>
+    <button type="button" id="okButton" onclick="inforead()">Ok</button>
+  </div>
+  <br id="br">
+  <h1 id="time">Loading...</h1>
+  <h2 id="date">Loading...</h2>
+  <h2 id="period">Loading...</h2>
+  <h2 id="countdown">Loading...</h2>
+  <div id="settingsBar">
+    <label for="dark">Dark Mode</label>
+    <input type="checkbox" id="dark" name="dark"><br>
+    <label for="mono">Use Monospace Font?</label>
+    <input type="checkbox" id="mono" name="mono">
+    <label for="timeDelay">Delay between updates (in ms):</label>
+    <input type="number" id="timeDelay" name="timeDelay" value="250"><br>
+    <button type="button" onclick="editor()">Editor Mode</button>
+  </div>
+  <div id="sideBar"></div>
+  <div id="bottomBar">
+    <label for="school">School:</label>
+    <select name="school" id="school">
+      <option value="lehigh">Lehigh Senior High</option>
+      <option value="wood">Wood Intermediate</option>
+      <option value="north">North High</option>
+    </select>
+    <label for="eventType">Schedule:</label>
+    <select name="eventType" id="eventType">
+      <option value="midtermday3">Midterm Day (12/20)</option>
+      <option value="normal">Normal</option>
+      <option value="2hrearly">2 Hour Early Out</option>
+      <option value="2hrlate">2 Hour Late Start</option>
+      <option value="paws">Smart Block First</option>
+    </select>
+    <button type="button" id="bottomButton" onclick="applyButton()">Apply</button>
+    <button type="button" id="bottomButton" onclick="getSchedule()">Schedule</button>
+    <button type="button" id="bottomButton" onclick="displayMode()">Display Mode</button>
+    <button type="button" id="bottomButton" onclick="settingsMenu()">More Settings</button>
+  </div>
+  <script>
+    var selectedEvents, wakeLock, timeDelay;
+
+    const unavailableEvents = [
+      { name: "These events haven't been added yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const woodPeriodsNormal = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 6, 0, 0) },
+      { name: "Advisory", time: new Date(2000, 1, 1, 9, 10, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 25, 0, 0) },
+      { name: "1st Period", time: new Date(2000, 1, 1, 9, 28, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 11, 0, 0) },
+      { name: "2nd Period", time: new Date(2000, 1, 1, 10, 14, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 57, 0, 0) },
+      { name: "Verkstad", time: new Date(2000, 1, 1, 11, 0, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 30, 0, 0) },
+      { name: "3rd Period", time: new Date(2000, 1, 1, 11, 33, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 12, 16, 0, 0) },
+      { name: "4th Period", time: new Date(2000, 1, 1, 12, 19, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 39, 0, 0) },
+      { name: "5th Period", time: new Date(2000, 1, 1, 13, 42, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 14, 26, 0, 0) },
+      { name: "6th Period", time: new Date(2000, 1, 1, 14, 29, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 15, 13, 0, 0) },
+      { name: "7th Period", time: new Date(2000, 1, 1, 15, 16, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 16, 0, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const woodPeriodsWednesday = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 6, 0, 0) },
+      { name: "Advisory", time: new Date(2000, 1, 1, 9, 10, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 40, 0, 0) },
+      { name: "1st Period", time: new Date(2000, 1, 1, 9, 43, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 19, 0, 0) },
+      { name: "2nd Period", time: new Date(2000, 1, 1, 10, 22, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 58, 0, 0) },
+      { name: "3rd Period", time: new Date(2000, 1, 1, 11, 1, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 37, 0, 0) },
+      { name: "4th Period", time: new Date(2000, 1, 1, 11, 40, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 0, 0, 0) },
+      { name: "5th Period", time: new Date(2000, 1, 1, 13, 3, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 40, 0, 0) },
+      { name: "6th Period", time: new Date(2000, 1, 1, 13, 43, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 14, 20, 0, 0) },
+      { name: "7th Period", time: new Date(2000, 1, 1, 14, 23, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 15, 0, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const woodPeriods2hrEarly = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 6, 0, 0) },
+      { name: "Advisory", time: new Date(2000, 1, 1, 9, 10, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 28, 0, 0) },
+      { name: "1st Period", time: new Date(2000, 1, 1, 9, 31, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 0, 0, 0) },
+      { name: "2nd Period", time: new Date(2000, 1, 1, 10, 3, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 32, 0, 0) },
+      { name: "5th Period", time: new Date(2000, 1, 1, 10, 35, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 5, 0, 0) },
+      { name: "3rd Period", time: new Date(2000, 1, 1, 11, 8, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 37, 0, 0) },
+      { name: "4th Period", time: new Date(2000, 1, 1, 11, 40, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 0, 0, 0) },
+      { name: "6th Period", time: new Date(2000, 1, 1, 13, 3, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 30, 0, 0) },
+      { name: "7th Period", time: new Date(2000, 1, 1, 13, 33, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 14, 0, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const woodPeriods2hrLate = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 6, 0, 0) },
+      { name: "1st Period", time: new Date(2000, 1, 1, 11, 10, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 37, 0, 0) },
+      { name: "3rd Period", time: new Date(2000, 1, 1, 11, 40, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 12, 17, 0, 0) },
+      { name: "4th Period", time: new Date(2000, 1, 1, 12, 20, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 40, 0, 0) },
+      { name: "2nd Period", time: new Date(2000, 1, 1, 13, 43, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 14, 14, 0, 0) },
+      { name: "5th Period", time: new Date(2000, 1, 1, 14, 17, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 14, 49, 0, 0) },
+      { name: "6th Period", time: new Date(2000, 1, 1, 14, 52, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 15, 24, 0, 0) },
+      { name: "7th Period", time: new Date(2000, 1, 1, 15, 27, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 16, 0, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const northBlocksNormal = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0) },
+      { name: "Block 1", time: new Date(2000, 1, 1, 8, 35, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 55, 0, 0) },
+      { name: "Block 2", time: new Date(2000, 1, 1, 10, 0, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 20, 0, 0) },
+      { name: "Block 3", time: new Date(2000, 1, 1, 11, 25, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 20, 0, 0) },
+      { name: "Smart Block", time: new Date(2000, 1, 1, 13, 25, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 14, 0, 0, 0) },
+      { name: "Block 4", time: new Date(2000, 1, 1, 14, 5, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const northBlocksWednesday = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0) },
+      { name: "Block 1", time: new Date(2000, 1, 1, 8, 35, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 40, 0, 0) },
+      { name: "Block 2", time: new Date(2000, 1, 1, 9, 45, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 50, 0, 0) },
+      { name: "Block 3", time: new Date(2000, 1, 1, 10, 55, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 12, 50, 0, 0) },
+      { name: "Smart Block", time: new Date(2000, 1, 1, 12, 55, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 20, 0, 0) },
+      { name: "Block 4", time: new Date(2000, 1, 1, 13, 25, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 14, 30, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const northBlocksPaws = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0) },
+      { name: "Smart Block", time: new Date(2000, 1, 1, 8, 35, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 10, 0, 0) },
+      { name: "Block 1", time: new Date(2000, 1, 1, 9, 15, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 35, 0, 0) },
+      { name: "Block 2", time: new Date(2000, 1, 1, 10, 40, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 12, 0, 0, 0) },
+      { name: "Block 3", time: new Date(2000, 1, 1, 12, 5, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 14, 0, 0, 0) },
+      { name: "Block 4", time: new Date(2000, 1, 1, 14, 5, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const northBlocks2hrEarly = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Early Bird", time: new Date(2000, 1, 1, 7, 25, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 8, 25, 0, 0) },
+      { name: "Block 1", time: new Date(2000, 1, 1, 8, 35, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 9, 40, 0, 0) },
+      { name: "Block 2", time: new Date(2000, 1, 1, 9, 45, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 10, 50, 0, 0) },
+      { name: "Block 3", time: new Date(2000, 1, 1, 10, 55, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 55, 0, 0) },
+      { name: "Block 4", time: new Date(2000, 1, 1, 12, 0, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 13, 0, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const northBlocks2hrLate = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Block 1", time: new Date(2000, 1, 1, 10, 35, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 11, 35, 0, 0) },
+      { name: "Block 3", time: new Date(2000, 1, 1, 11, 40, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 13, 20, 0, 0) },
+      { name: "Block 2", time: new Date(2000, 1, 1, 13, 25, 0, 0) },
+      { name: "Passing Time", time: new Date(2000, 1, 1, 14, 25, 0, 0) },
+      { name: "Block 4", time: new Date(2000, 1, 1, 14, 30, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    const lehighSeniorMidtermDay3 = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Start of Day", time: new Date(2000, 1, 1, 6, 30, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 6, 50, 0, 0) },
+      { name: "2nd Period", time: new Date(2000, 1, 1, 7, 5, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 8, 42, 0, 0) },
+      { name: "3rd Period", time: new Date(2000, 1, 1, 8, 47, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 9, 33, 0, 0) },
+      { name: "4th Period", time: new Date(2000, 1, 1, 9, 38, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 10, 24, 0, 0) },
+      { name: "5th Period", time: new Date(2000, 1, 1, 10, 29, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 11, 53, 0, 0) },
+      { name: "6th Period", time: new Date(2000, 1, 1, 11, 58, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 13, 35, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];
+    function load() {
+      applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250));
+      setTime();
+      wakeLock();
+      // alertBox("");
+    }
+    function getCurrentEvent(events, time) {
+      var found = false;
+      for (var i = 0; i < events.length && !(found); i++) {
+        if (events[i].time.getTime() > time.getTime()) { found = true; }
+      }
+      return (i - 2);
+    }
+    function setTime() {
+      var date = new ServerDate();
+      if (selectedEvents == lehighSeniorMidtermDay3) { selectedEvents == lehighSeniorMidtermDay3; }
+      else if (selectedEvents == woodPeriodsNormal && date.getDay() == 3) { selectedEvents == woodPeriodsWednesday; }
+      else if (selectedEvents == woodPeriodsWednesday && date.getDay() != 3) { selectedEvents == woodPeriodsNormal; }
+      else if (selectedEvents == northBlocksNormal && date.getDay() == 3) { selectedEvents == northBlocksWednesday; }
+      else if (selectedEvents == northBlocksWednesday && date.getDay() != 3) { selectedEvents == northBlocksNormal; }
+      var timeNoDate = new Date();
+      timeNoDate.setFullYear(2000);
+      timeNoDate.setMonth(1, 1);
+      timeNoDate = new Date(timeNoDate.getTime() + (ServerDate - new Date()));
+      const timeDifference = new Date(selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].time - timeNoDate);
+      var hour = date.getHours();
+      var min = date.getMinutes();
+      var sec = date.getSeconds();
+      var year = date.getFullYear();
+      var month = date.getMonth();
+      var day = date.getDate();
+      month = monthName(month);
+      document.getElementById('period').innerHTML = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate)].name;
+      if (timeDifference.getDate() < 31) {
+        document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) !== 0 ? ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
+      }
+      else if (timeDifference.getHours() > 18) {
+        document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19) !== 0 ? ((timeDifference.getHours() - 19) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
+      }
+      else {
+        document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + timeDifference.getMinutes() + ":" + fixTime(timeDifference.getSeconds());
+      }
+      sec++;
+      if (sec == 60) { sec = 0; min++; }
+      if (min == 60) { min = 0; hour++; }
+      var ampm;
+      if (hour >= 12) { ampm = "PM"; } else { ampm = "AM"; }
+      hour = fixHour(hour);
+      min = fixTime(min);
+      sec = fixTime(sec);
+      document.getElementById('time').innerHTML = hour + ":" + min + ":" + sec + " " + ampm;
+      document.getElementById('date').innerHTML = month + " " + day + ", " + year;
+      setTimeout(setTime, timeDelay);
+    }
+    function fixTime(i) {
+      if (i < 10) { i = "0" + i; }
+      return i;
+    }
+    function fixHour(i) {
+      if (i >= 13) { i = i - 12; }
+      else if (i == 0) { i = 12; }
+      return i;
+    }
+    function monthName(i) {
+      if (i == 0) { i = "January"; }
+      if (i == 1) { i = "February"; }
+      if (i == 2) { i = "March"; }
+      if (i == 3) { i = "April"; }
+      if (i == 4) { i = "May"; }
+      if (i == 5) { i = "June"; }
+      if (i == 6) { i = "July"; }
+      if (i == 7) { i = "August"; }
+      if (i == 8) { i = "September"; }
+      if (i == 9) { i = "October"; }
+      if (i == 10) { i = "November"; }
+      if (i == 11) { i = "December"; }
+      return i;
+    }
+    function applySettings(school, dark, mono, eventType, delay) {
+      timeDelay = delay;
+      var date = new Date();
+      if (eventType == "midtermday3") {
+        if (school == "lehigh") { selectedEvents = lehighSeniorMidtermDay3; }
+      }
+      if (eventType == "normal") {
+        if (school == "wood" && date.getDay() == 3) { selectedEvents = woodPeriodsWednesday; }
+        else if (school == "wood") { selectedEvents = woodPeriodsNormal; }
+        else if (school == "north" && date.getDay() == 3) { selectedEvents = northBlocksWednesday; }
+        else if (school == "north") { selectedEvents = northBlocksNormal; }
+      }
+      if (eventType == "2hrlate") {
+        if (school == "wood") { selectedEvents = woodPeriods2hrLate; }
+        else if (school == "north") { selectedEvents = northBlocks2hrLate; }
+      }
+      if (eventType == "2hrearly") {
+        if (school == "wood") { selectedEvents = woodPeriods2hrEarly; }
+        else if (school == "north") { selectedEvents = northBlocks2hrEarly; }
+      }
+      if (eventType == "paws") {
+        if (school == "wood") { selectedEvents = woodPeriodsNormal; }
+        else if (school == "north") { selectedEvents = northBlocksPaws; }
+      }
+      if (mono) {
+        document.getElementById("time").style.fontFamily = "Roboto Mono, monospace";
+        document.getElementById("date").style.fontFamily = "Roboto Mono, monospace";
+        document.getElementById("period").style.fontFamily = "Roboto Mono, monospace";
+        document.getElementById("countdown").style.fontFamily = "Roboto Mono, monospace";
+      }
+      else {
+        document.getElementById("time").style.fontFamily = "Montserrat, sans-serif";
+        document.getElementById("date").style.fontFamily = "Montserrat, sans-serif";
+        document.getElementById("period").style.fontFamily = "Montserrat, sans-serif";
+        document.getElementById("countdown").style.fontFamily = "Montserrat, sans-serif";
+      }
+      if (dark) {
+        document.body.style.backgroundColor = "black";
+        document.body.style.color = "white";
+      }
+      else {
+        document.body.style.backgroundColor = "white";
+        document.body.style.color = "black";
+      }
+      var e = document.getElementById("sideBar");
+      e.textContent = '';
+      if (selectedEvents.length % 2 == 1) {
+        for (var i = 0; i < selectedEvents.length - 4; i = i + 2) {
+          var t = document.createTextNode(selectedEvents[i + 2].name + ": " + fixHour(selectedEvents[i + 2].time.getHours()) + ":" + fixTime(selectedEvents[i + 2].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 3].time.getHours()) + ":" + fixTime(selectedEvents[i + 3].time.getMinutes()));
+          var br = document.createElement("br");
+          e.appendChild(t);
+          e.appendChild(br);
+        }
+      }
+      else {
+        for (var i = 0; i < selectedEvents.length - 2; i = i + 2) {
+          var t = document.createTextNode(selectedEvents[i + 1].name + ": " + fixHour(selectedEvents[i + 1].time.getHours()) + ":" + fixTime(selectedEvents[i + 1].time.getMinutes()) + "-" + fixHour(selectedEvents[i + 2].time.getHours()) + ":" + fixTime(selectedEvents[i + 2].time.getMinutes()));
+          var br = document.createElement("br");
+          e.appendChild(t);
+          e.appendChild(br);
+        }
+      }
+    }
+    function applyButton() {
+      applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value);
+      localStorage.setItem("school", document.getElementById("school").value);
+      localStorage.setItem("dark", document.getElementById("dark").checked);
+      localStorage.setItem("mono", document.getElementById("mono").checked);
+      localStorage.setItem("eventtype", document.getElementById("eventType").value);
+      localStorage.setItem("timedelay", document.getElementById("timeDelay").value);
+    }
+    function displayMode() {
+      document.getElementById("bottomBar").style.display = 'none';
+      document.body.style.cursor = 'none';
+      document.documentElement.requestFullscreen();
+    }
+    function getSchedule() {
+      var e = document.getElementById("sideBar");
+      if (window.getComputedStyle(e).getPropertyValue('display') == 'none') {
+        e.style.display = 'inline';
+      }
+      else {
+        e.style.display = 'none';
+      }
+    }
+    function settingsMenu() {
+      var e = document.getElementById("settingsBar");
+      if (window.getComputedStyle(e).getPropertyValue('display') == 'none') {
+        e.style.display = 'inline';
+      }
+      else {
+        e.style.display = 'none';
+      }
+    }
+    function editor() {
+      settingsMenu();
+      document.body.style.overflow = 'visible';
+      document.getElementById("bottomBar").id = "";
+    }
+    function alertBox(text) {
+      document.getElementById("alert").style.visibility = 'visible';
+      document.getElementById("alertContent").innerHTML = text;
+    }
+    function inforead() { document.getElementById("alert").style.visibility = 'hidden' }
+    document.addEventListener("keypress", function (e) {
+      document.getElementById("bottomBar").style.display = 'inline';
+      document.body.style.cursor = 'auto';
+      document.exitFullscreen();
+    }, false);
+    async function wakeLock() {
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+      } catch (err) {
+        console.log(`${err.name}, ${err.message}`);
+      }
+    }
+    document.addEventListener('visibilitychange', async () => {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+        } catch (err) {
+          console.log(`${err.name}, ${err.message}`);
+        }
+      }
+    });
+  </script>
 </body>
+
 </html>
