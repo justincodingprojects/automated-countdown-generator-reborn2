@@ -90,6 +90,8 @@ input {height: 24px;}
 <h2 id="period">Loading...</h2>
 <h2 id="countdown">Loading...</h2>
 <div id="settingsBar">
+  <label for="dark">Dark Mode</label>
+  <input type="checkbox" id="dark" name="dark">
   <label for="mono">Use Monospace Font?</label>
   <input type="checkbox" id="mono" name="mono">
   <label for="timeDelay">Delay between updates (in ms):</label>
@@ -376,7 +378,7 @@ function monthName(i) {
   if (i == 11) {i = "December";}
   return i;
 }
-function applySettings(school, mono, eventType, delay) {
+function applySettings(school, dark, mono, eventType, delay) {
   timeDelay = delay;
   var date = new Date();
   if (eventType == "midtermday3") {
@@ -412,6 +414,13 @@ function applySettings(school, mono, eventType, delay) {
     document.getElementById("period").style.fontFamily = "Montserrat, sans-serif";
     document.getElementById("countdown").style.fontFamily = "Montserrat, sans-serif";
   }
+  if (dark) {
+    document.body.style.backgroundColor = "black";
+    document.body.style.color = "white";
+  } else {
+    document.body.style.backgroundColor = "white";
+    document.body.style.color = "black";
+  }
   var e = document.getElementById("sideBar");
   e.textContent = '';
   if (selectedEvents.length % 2 == 1) {
@@ -431,7 +440,7 @@ function applySettings(school, mono, eventType, delay) {
     }
   }
 }
-function applyButton() {applySettings(document.getElementById("school").value, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value);}
+function applyButton() {applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value);}
 function displayMode() {
   document.getElementById("bottomBar").style.display = 'none';
   document.body.style.cursor = 'none';
