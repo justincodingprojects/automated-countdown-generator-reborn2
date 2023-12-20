@@ -301,7 +301,7 @@ const lehighSeniorMidtermDay3 = [
 {name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
 ];
 function load() {
-  applySettings("lehigh", false, "midtermday3", 250);
+  applySettings("lehigh", false, false, "midtermday3", 250);
   setTime();
   wakeLock();
   // alertBox("");
@@ -417,7 +417,8 @@ function applySettings(school, dark, mono, eventType, delay) {
   if (dark) {
     document.body.style.backgroundColor = "black";
     document.body.style.color = "white";
-  } else {
+  }
+  else {
     document.body.style.backgroundColor = "white";
     document.body.style.color = "black";
   }
