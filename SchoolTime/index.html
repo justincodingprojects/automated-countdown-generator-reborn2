@@ -121,7 +121,9 @@
     <label for="mono">Use Monospace Font?</label>
     <input type="checkbox" id="mono" name="mono">
     <label for="timeDelay">Delay between updates (in ms):</label>
-    <input type="number" id="timeDelay" name="timeDelay" value="250"><br>
+    <input type="number" id="timeDelay" name="timeDelay" value="250" min="0"><br>
+    <label for="offset">Offset (in ms)</label>
+    <input type="number" id="offset" name="offset" value="0"><br>
     <button type="button" onclick="editor()">Editor Mode</button>
   </div>
   <div id="sideBar"></div>
@@ -146,7 +148,7 @@
     <button type="button" id="bottomButton" onclick="settingsMenu()">More Settings</button>
   </div>
   <script>
-    var selectedEvents, wakeLock, timeDelay;
+    var selectedEvents, wakeLock, timeDelay, timeOffset;
 
     const unavailableEvents = [
       { name: "These events haven't been added yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
@@ -327,7 +329,7 @@
       { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
     ];
     function load() {
-      applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250));
+      applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250), ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0));
       document.getElementById("dark").checked = ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false);
       document.getElementById("mono").checked = ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false);
       setTime();
@@ -351,7 +353,7 @@
       var timeNoDate = new Date();
       timeNoDate.setFullYear(2000);
       timeNoDate.setMonth(1, 1);
-      timeNoDate = new Date(timeNoDate.getTime() + (ServerDate - new Date()));
+      timeNoDate = new Date(timeNoDate.getTime() + (ServerDate - new Date()) + offset);
       const timeDifference = new Date(selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].time - timeNoDate);
       var hour = date.getHours();
       var min = date.getMinutes();
@@ -406,8 +408,9 @@
       if (i == 11) { i = "December"; }
       return i;
     }
-    function applySettings(school, dark, mono, eventType, delay) {
+    function applySettings(school, dark, mono, eventType, delay, offset) {
       timeDelay = delay;
+      timeOffset = offset;
       var date = new Date();
       if (eventType == "midtermday3") {
         if (school == "lehigh") { selectedEvents = lehighSeniorMidtermDay3; }
@@ -470,12 +473,13 @@
       }
     }
     function applyButton() {
-      applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value);
+      applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value, document.getElementById("offset").value);
       localStorage.setItem("school", document.getElementById("school").value);
       localStorage.setItem("dark", document.getElementById("dark").checked);
       localStorage.setItem("mono", document.getElementById("mono").checked);
       localStorage.setItem("eventtype", document.getElementById("eventType").value);
       localStorage.setItem("timedelay", document.getElementById("timeDelay").value);
+      localStorage.setItem("offset", document.getElementById("offset").value);
     }
     function displayMode() {
       document.getElementById("bottomBar").style.display = 'none';
