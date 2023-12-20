@@ -301,7 +301,7 @@ const lehighSeniorMidtermDay3 = [
 {name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0)}
 ];
 function load() {
-  applySettings("lehigh", false, false, "midtermday3", 250);
+  applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? localStorage.getItem("dark") : false), ((localStorage.getItem("mono") !== null) ? localStorage.getItem("mono") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday3"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250));
   setTime();
   wakeLock();
   // alertBox("");
@@ -441,7 +441,14 @@ function applySettings(school, dark, mono, eventType, delay) {
     }
   }
 }
-function applyButton() {applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value);}
+function applyButton() {
+  applySettings(document.getElementById("school").value, document.getElementById("dark").checked, document.getElementById("mono").checked, document.getElementById("eventType").value, document.getElementById("timeDelay").value);
+  localStorage.setItem("school", document.getElementById("school").value);
+  localStorage.setItem("dark", document.getElementById("dark").value);
+  localStorage.setItem("mono", document.getElementById("mono").value);
+  localStorage.setItem("eventtype", document.getElementById("eventType").value);
+  localStorage.setItem("timedelay", document.getElementById("timeDelay").value);
+}
 function displayMode() {
   document.getElementById("bottomBar").style.display = 'none';
   document.body.style.cursor = 'none';
