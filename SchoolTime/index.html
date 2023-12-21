@@ -387,22 +387,15 @@
       var month = date.getMonth();
       var day = date.getDate();
       month = monthName(month);
-      var periodValue = document.getElementById('period').innerHTML
-      if (periodValue !== selectedEvents[getCurrentEvent(selectedEvents, timeNoDate)].name) periodValue = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate)].name;
+      document.getElementById('period').innerHTML = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate)].name;
       if (timeDifference.getDate() < 31) {
-        var countdownValue = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) !== 0 ? ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
-        var countdownElementValue = document.getElementById('countdown').innerHTML;
-        if (countdownElementValue !== "Time until " + countdownValue) countdownElementValue = "Time until " + countdownValue;
+        document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) !== 0 ? ((timeDifference.getHours() - 19 + (timeDifference.getDate() * 24)) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
       }
       else if (timeDifference.getHours() > 18) {
-        var countdownValue = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19) !== 0 ? ((timeDifference.getHours() - 19) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
-        var countdownElementValue = document.getElementById('countdown').innerHTML;
-        if (countdownElementValue !== "Time until " + countdownValue) countdownElementValue = "Time until " + countdownValue;
+        document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + ((timeDifference.getHours() - 19) !== 0 ? ((timeDifference.getHours() - 19) + ":") : "") + fixTime(timeDifference.getMinutes()) + ":" + fixTime(timeDifference.getSeconds());
       }
       else {
-        var countdownValue = selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + timeDifference.getMinutes() + ":" + fixTime(timeDifference.getSeconds());
-        var countdownElementValue = document.getElementById('countdown').innerHTML;
-        if (countdownElementValue !== "Time until " + countdownValue) countdownElementValue = "Time until " + countdownValue;
+        document.getElementById('countdown').innerHTML = "Time until " + selectedEvents[getCurrentEvent(selectedEvents, timeNoDate) + 1].name.replace("School has ended.", "School Ends") + " - " + timeDifference.getMinutes() + ":" + fixTime(timeDifference.getSeconds());
       }
       sec++;
       if (sec == 60) { sec = 0; min++; }
@@ -412,8 +405,7 @@
       hour = fixHour(hour);
       min = fixTime(min);
       sec = fixTime(sec);
-      var timeValue = document.getElementById('time').innerHTML
-      if (timeValue !== (hour + ":" + min + ":" + sec + " " + ampm)) timeValue = (hour + ":" + min + ":" + sec + " " + ampm);
+      document.getElementById('time').innerHTML = hour + ":" + min + ":" + sec + " " + ampm;
       document.getElementById('date').innerHTML = month + " " + day + ", " + year;
       setTimeout(setTime, timeDelay);
     }
