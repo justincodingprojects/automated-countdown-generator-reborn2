@@ -131,16 +131,16 @@
     <label for="school">School:</label>
     <select name="school" id="school">
       <option value="lehigh">Lehigh Senior High</option>
-      <option value="wood">Wood Intermediate</option>
-      <option value="north">North High</option>
+      <!--<option value="wood">Wood Intermediate</option>
+      <option value="north">North High</option>-->
     </select>
     <label for="eventType">Schedule:</label>
     <select name="eventType" id="eventType">
-      <option value="midtermday4">Midterm Day (12/21)</option>
       <option value="normal">Normal</option>
-      <option value="2hrearly">2 Hour Early Out</option>
+      <option value="midtermday4">Midterm Day (12/21)</option>
+      <!--<option value="2hrearly">2 Hour Early Out</option>
       <option value="2hrlate">2 Hour Late Start</option>
-      <option value="paws">Smart Block First</option>
+      <option value="paws">Smart Block First</option>-->
     </select>
     <button type="button" id="bottomButton" onclick="applyButton()">Apply</button>
     <button type="button" id="bottomButton" onclick="getSchedule()">Schedule</button>
@@ -154,7 +154,7 @@
       { name: "These events haven't been added yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
       { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
     ];
-    const woodPeriodsNormal = [
+    /*const woodPeriodsNormal = [
       { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
       { name: "Passing Time", time: new Date(2000, 1, 1, 9, 6, 0, 0) },
       { name: "Advisory", time: new Date(2000, 1, 1, 9, 10, 0, 0) },
@@ -311,7 +311,28 @@
       { name: "Block 4", time: new Date(2000, 1, 1, 14, 30, 0, 0) },
       { name: "School has ended.", time: new Date(2000, 1, 1, 15, 30, 0, 0) },
       { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
+    ];*/
+    const lehighSeniorNormal = [
+      { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
+      { name: "Start of Day", time: new Date(2000, 1, 1, 6, 30, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 6, 50, 0, 0) },
+      { name: "1st Period", time: new Date(2000, 1, 1, 7, 5, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 7, 51, 0, 0) },
+      { name: "2nd Period", time: new Date(2000, 1, 1, 7, 56, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 8, 42, 0, 0) },
+      { name: "3rd Period", time: new Date(2000, 1, 1, 8, 47, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 9, 33, 0, 0) },
+      { name: "4th Period", time: new Date(2000, 1, 1, 9, 38, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 10, 24, 0, 0) },
+      { name: "5th Period", time: new Date(2000, 1, 1, 10, 29, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 11, 53, 0, 0) },
+      { name: "6th Period", time: new Date(2000, 1, 1, 11, 58, 0, 0) },
+      { name: "Rotation", time: new Date(2000, 1, 1, 12, 44, 0, 0) },
+      { name: "7th Period", time: new Date(2000, 1, 1, 12, 49, 0, 0) },
+      { name: "School has ended.", time: new Date(2000, 1, 1, 13, 35, 0, 0) },
+      { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
     ];
+
     const lehighSeniorMidtermDay4 = [
       { name: "School hasn't started yet.", time: new Date(2000, 1, 1, 0, 0, 0, 0) },
       { name: "Start of Day", time: new Date(2000, 1, 1, 6, 30, 0, 0) },
@@ -329,9 +350,10 @@
       { name: "New Day", time: new Date(2000, 1, 1, 24, 0, 0, 0) }
     ];
     function load() {
-      applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "midtermday4"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250), ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0));
+      applySettings(((localStorage.getItem("school") !== null) ? localStorage.getItem("school") : "lehigh"), ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false), ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false), ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "normal"), ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250), ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0));
       document.getElementById("dark").checked = ((localStorage.getItem("dark") !== null) ? (localStorage.getItem("dark") === "true") : false);
       document.getElementById("mono").checked = ((localStorage.getItem("mono") !== null) ? (localStorage.getItem("mono") === "true") : false);
+      document.getElementById("eventType").value = ((localStorage.getItem("eventtype") !== null) ? localStorage.getItem("eventtype") : "normal");
       document.getElementById("timeDelay").value = ((localStorage.getItem("timedelay") !== null) ? localStorage.getItem("timedelay") : 250);
       document.getElementById("offset").value = ((localStorage.getItem("offset") !== null) ? localStorage.getItem("offset") : 0);
       setTime();
@@ -347,11 +369,12 @@
     }
     function setTime() {
       var date = new ServerDate();
-      if (selectedEvents == lehighSeniorMidtermDay4) { selectedEvents == lehighSeniorMidtermDay4; }
-      else if (selectedEvents == woodPeriodsNormal && date.getDay() == 3) { selectedEvents == woodPeriodsWednesday; }
-      else if (selectedEvents == woodPeriodsWednesday && date.getDay() != 3) { selectedEvents == woodPeriodsNormal; }
-      else if (selectedEvents == northBlocksNormal && date.getDay() == 3) { selectedEvents == northBlocksWednesday; }
-      else if (selectedEvents == northBlocksWednesday && date.getDay() != 3) { selectedEvents == northBlocksNormal; }
+      if (selectedEvents == lehighSeniorNormal) { selectedEvents == lehighSeniorNormal; }
+      else if (selectedEvents == lehighSeniorMidtermDay4) { selectedEvents == lehighSeniorMidtermDay4; }
+      //else if (selectedEvents == woodPeriodsNormal && date.getDay() == 3) { selectedEvents == woodPeriodsWednesday; }
+      //else if (selectedEvents == woodPeriodsWednesday && date.getDay() != 3) { selectedEvents == woodPeriodsNormal; }
+      //else if (selectedEvents == northBlocksNormal && date.getDay() == 3) { selectedEvents == northBlocksWednesday; }
+      //else if (selectedEvents == northBlocksWednesday && date.getDay() != 3) { selectedEvents == northBlocksNormal; }
       var timeNoDate = new Date();
       timeNoDate.setFullYear(2000);
       timeNoDate.setMonth(1, 1);
@@ -414,16 +437,17 @@
       timeDelay = delay;
       timeOffset = offset;
       var date = new Date();
+      if (eventType == "normal") {
+        if (school == "lehigh") { selectedEvents = lehighSeniorNormal; }
+        //if (school == "wood" && date.getDay() == 3) { selectedEvents = woodPeriodsWednesday; }
+        //else if (school == "wood") { selectedEvents = woodPeriodsNormal; }
+        //else if (school == "north" && date.getDay() == 3) { selectedEvents = northBlocksWednesday; }
+        //else if (school == "north") { selectedEvents = northBlocksNormal; }
+      }
       if (eventType == "midtermday4") {
         if (school == "lehigh") { selectedEvents = lehighSeniorMidtermDay4; }
       }
-      if (eventType == "normal") {
-        if (school == "wood" && date.getDay() == 3) { selectedEvents = woodPeriodsWednesday; }
-        else if (school == "wood") { selectedEvents = woodPeriodsNormal; }
-        else if (school == "north" && date.getDay() == 3) { selectedEvents = northBlocksWednesday; }
-        else if (school == "north") { selectedEvents = northBlocksNormal; }
-      }
-      if (eventType == "2hrlate") {
+      /*if (eventType == "2hrlate") {
         if (school == "wood") { selectedEvents = woodPeriods2hrLate; }
         else if (school == "north") { selectedEvents = northBlocks2hrLate; }
       }
@@ -434,7 +458,7 @@
       if (eventType == "paws") {
         if (school == "wood") { selectedEvents = woodPeriodsNormal; }
         else if (school == "north") { selectedEvents = northBlocksPaws; }
-      }
+      }*/
       if (mono) {
         document.getElementById("time").style.fontFamily = "Roboto Mono, monospace";
         document.getElementById("date").style.fontFamily = "Roboto Mono, monospace";
