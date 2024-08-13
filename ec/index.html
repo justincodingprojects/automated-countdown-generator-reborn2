@@ -50,12 +50,14 @@
     <div class="container">
         <button onclick="launchEaglercraft1()">Launch Eaglercraft 1.5.2 </button>
         <div class="launching-message" id="launchingMessage1">Launching Eaglercraft 1.5.2...</div>
+        <br>
         <button onclick="launchEaglercraft2()">Launch Eaglercraft 1.8.8 </button>
         <div class="launching-message" id="launchingMessage2">Launching Eaglercraft 1.8.8...</div>
     </div>
 
     <script>
         function launchEaglercraft1() {
+            document.getElementsByTagName('br')[0].style.display = 'none';
             document.getElementsByTagName('button')[1].style.display = 'none';
             document.getElementById('launchingMessage1').style.display = 'block';
             document.getElementById('launchingMessage2').style.display = 'none';
@@ -67,6 +69,7 @@
             }))
         }
         function launchEaglercraft2() {
+            document.getElementsByTagName('br')[0].style.display = 'none';
             document.getElementsByTagName('button')[0].style.display = 'none';
             document.getElementById('launchingMessage2').style.display = 'block';
             document.getElementById('launchingMessage1').style.display = 'none';
