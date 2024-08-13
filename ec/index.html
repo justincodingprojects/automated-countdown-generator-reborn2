@@ -48,14 +48,29 @@
 
 <body>
     <div class="container">
-        <button onclick="launchEaglercraft()">Launch Eaglercraft</button>
-        <div class="launching-message" id="launchingMessage">Launching Eaglercraft...</div>
+        <button onclick="launchEaglercraft1()">Launch Eaglercraft 1.5.2 </button>
+        <div class="launching-message1" id="launchingMessage">Launching Eaglercraft 1.5.2...</div>
+        <button onclick="launchEaglercraft2()">Launch Eaglercraft 1.8.8 </button>
+        <div class="launching-message2" id="launchingMessage">Launching Eaglercraft 1.8.8...</div>
     </div>
 
     <script>
-        function launchEaglercraft() {
-            document.getElementById('launchingMessage').style.display = 'block';
+        function launchEaglercraft1() {
+            document.getElementsByTagName('BUTTON')[1].style.display = 'none';
+            document.getElementById('launchingMessage1').style.display = 'block';
+            document.getElementById('launchingMessage2').style.display = 'none';
             fetch("https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/Offline_Download_Version.html").then(r => r.text().then(t => {
+                var e = window.open("")
+                e.document.write(t),
+                    e.document.title = "HTML preview",
+                    e.document.close()
+            }))
+        }
+        function launchEaglercraft2() {
+            document.getElementsByTagName('BUTTON')[0].style.display = 'none';
+            document.getElementById('launchingMessage2').style.display = 'block';
+            document.getElementById('launchingMessage1').style.display = 'none';
+            fetch("https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/EaglercraftX_1.8_Offline_en_US.html").then(r => r.text().then(t => {
                 var e = window.open("")
                 e.document.write(t),
                     e.document.title = "HTML preview",
