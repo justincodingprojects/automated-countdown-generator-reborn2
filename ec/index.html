@@ -56,7 +56,7 @@
 
     <script>
         function launchEaglercraft1() {
-            document.getElementsByTagName('BUTTON')[1].style.display = 'none';
+            document.getElementsByTagName('button')[1].style.display = 'none';
             document.getElementById('launchingMessage1').style.display = 'block';
             document.getElementById('launchingMessage2').style.display = 'none';
             fetch("https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/Offline_Download_Version.html").then(r => r.text().then(t => {
@@ -67,7 +67,7 @@
             }))
         }
         function launchEaglercraft2() {
-            document.getElementsByTagName('BUTTON')[0].style.display = 'none';
+            document.getElementsByTagName('button')[0].style.display = 'none';
             document.getElementById('launchingMessage2').style.display = 'block';
             document.getElementById('launchingMessage1').style.display = 'none';
             fetch("https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/EaglercraftX_1.8_Offline_en_US.html").then(r => r.text().then(t => {
