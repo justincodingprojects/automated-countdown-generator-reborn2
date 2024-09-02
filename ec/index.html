@@ -21,9 +21,7 @@
 
         .container {
             text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+            margin: auto;
         }
 
         button {
@@ -36,8 +34,8 @@
             transition: background-color 0.3s;
             color: white;
             text-shadow: none;
-            margin: -20px auto;
-            width: max-content;
+            margin-bottom: 10px; /* Add spacing between buttons */
+            width: auto; /* Let the width be determined by the content */
         }
 
         button:hover {
@@ -55,6 +53,7 @@
             padding: 10px;
             background-color: #222;
             color: #aaa;
+            margin-top: auto;
         }
     </style>
 </head>
@@ -72,7 +71,7 @@
         <p></p>
         <br>
         <button id="launchBtn3" onclick="launchEaglercraft('1.8.8-u35', 'launchingMessage3', this, 'https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/EaglercraftX_1_8_u35_Offline_Signed.html')">Launch Eaglercraft 1.8.8 (LATEST*)</button>
-        <div class="launching-message" id="launchingMessage2" style="display: none;">Launching Eaglercraft 1.8.8...</div>
+        <div class="launching-message" id="launchingMessage3" style="display: none;">Launching Eaglercraft 1.8.8...</div>
     </div>
 
     <footer>
