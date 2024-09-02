@@ -48,43 +48,38 @@
 
 <body>
     <div class="container">
-        <button onclick="launchEaglercraft1()">Launch Eaglercraft 1.5.2 </button>
-        <div class="launching-message" id="launchingMessage1">Launching Eaglercraft 1.5.2...</div>
+        <button id="launchBtn1" onclick="launchEaglercraft('1.5.2-sp1.01', 'launchingMessage1', this, 'https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/Offline_Download_Version.html')">Launch Eaglercraft 1.5.2</button>
+        <div class="launching-message" id="launchingMessage1" style="display: none;">Launching Eaglercraft 1.5.2...</div>
         <br>
         <p></p>
         <br>
-        <button onclick="launchEaglercraft2()">Launch Eaglercraft 1.8.8 </button>
-        <div class="launching-message" id="launchingMessage2">Launching Eaglercraft 1.8.8...</div>
+        <button id="launchBtn2" onclick="launchEaglercraft('1.8.8-u22', 'launchingMessage2', this, 'https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/EaglercraftX_1.8_Offline_en_US.html')">Launch Eaglercraft 1.8.8 (STABLE*)</button>
+        <div class="launching-message" id="launchingMessage2" style="display: none;">Launching Eaglercraft 1.8.8...</div>
+        <br>
+        <p></p>
+        <br>
+        <button id="launchBtn3" onclick="launchEaglercraft('1.8.8-u35', 'launchingMessage3', this, 'https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/EaglercraftX_1_8_u35_Offline_Signed.html')">Launch Eaglercraft 1.8.8 (LATEST*)</button>
+        <div class="launching-message" id="launchingMessage2" style="display: none;">Launching Eaglercraft 1.8.8...</div>
     </div>
 
+    <footer>
+        <hr>
+        <p>* STABLE: This version is the most tested and recommended for general use.</p>
+        <p>* LATEST: This version includes the most recent updates but may have some unresolved issues.</p>
+        <p>Attention Chromebook Users: If your Chromebook is managed by your school, it's best to use the STABLE build since it's been tested for reliability. You can try the LATEST build, but it might have stability issues or not work properly.</p>
+    </footer>
+
     <script>
-        function launchEaglercraft1() {
-            document.getElementsByTagName('br')[0].style.display = 'none';
-            document.getElementsByTagName('br')[1].style.display = 'none';
-            document.getElementsByTagName('p')[0].style.display = 'none';
-            document.getElementsByTagName('button')[1].style.display = 'none';
-            document.getElementById('launchingMessage1').style.display = 'block';
-            document.getElementById('launchingMessage2').style.display = 'none';
-            fetch("https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/Offline_Download_Version.html").then(r => r.text().then(t => {
-                var e = window.open("")
-                e.document.write(t),
-                    e.document.title = "HTML preview",
-                    e.document.close()
-            }))
-        }
-        function launchEaglercraft2() {
-            document.getElementsByTagName('br')[0].style.display = 'none';
-            document.getElementsByTagName('br')[1].style.display = 'none';
-            document.getElementsByTagName('p')[0].style.display = 'none';
-            document.getElementsByTagName('button')[0].style.display = 'none';
-            document.getElementById('launchingMessage2').style.display = 'block';
-            document.getElementById('launchingMessage1').style.display = 'none';
-            fetch("https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/EaglercraftX_1.8_Offline_en_US.html").then(r => r.text().then(t => {
-                var e = window.open("")
-                e.document.write(t),
-                    e.document.title = "HTML preview",
-                    e.document.close()
-            }))
+        function launchEaglercraft(version, messageId, currentButton, url) {
+            document.querySelectorAll('br, p').forEach(el => el.style.display = 'none');
+            currentButton.style.display = 'none';
+            document.getElementById(messageId).style.display = 'block';
+            fetch(url).then(r => r.text().then(t => {
+                var newWindow = window.open("");
+                newWindow.document.write(t);
+                newWindow.document.title = "HTML preview";
+                newWindow.document.close();
+            }));
         }
     </script>
 </body>
