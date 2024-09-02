@@ -9,17 +9,22 @@
         body {
             background-color: black;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
             height: 100vh;
             background-size: cover;
             color: white;
             font-family: 'Minecraft', sans-serif;
             text-shadow: 2px 2px 4px #000;
+            margin: 0;
         }
 
         .container {
             text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         button {
@@ -43,6 +48,13 @@
             margin-top: 20px;
             font-size: 24px;
         }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #222;
+            color: #aaa;
+        }
     </style>
 </head>
 
@@ -63,10 +75,9 @@
     </div>
 
     <footer>
-        <hr>
-        <p>* STABLE: This version is the most tested and recommended for general use.</p>
-        <p>* LATEST: This version includes the most recent updates but may have some unresolved issues.</p>
-        <p>Attention Chromebook Users: If your Chromebook is managed by your school, it's best to use the STABLE build since it's been tested for reliability. You can try the LATEST build, but it might have stability issues or not work properly.</p>
+        <p>STABLE: This version is the most tested and recommended for general use.</p>
+        <p>LATEST: This version includes the most recent updates but may have some unresolved issues.</p>
+        <p>If your school manages your Chromebook, use the STABLE build for reliability. If you try the LATEST build, it might not work as well or not at all.</p>
     </footer>
 
     <script>
