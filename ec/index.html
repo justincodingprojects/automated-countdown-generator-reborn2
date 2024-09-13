@@ -63,7 +63,12 @@
         <br>
         <p></p>
         <br>
-        <button onclick="launchEaglercraft4()">Launch Eaglercraft 1.12.1 (COMING NEVER!!!)</button>
+        <button onclick="launchEaglercraft4()">Launch Eaglercraft 1.11.2</button>
+        <div class="launching-message" id="launchingMessage4">Launching Eaglercraft 1.11.2...</div>
+        <br>
+        <p></p>
+        <br>
+        <button onclick="launchEaglercraft5()">Launch Eaglercraft 1.12.1 (COMING NEVER!!!)</button>
     </div>
 
     <script>
@@ -73,6 +78,7 @@
             document.getElementsByTagName('button')[1].style.display = 'none';
             document.getElementsByTagName('button')[2].style.display = 'none';
             document.getElementsByTagName('button')[3].style.display = 'none';
+            document.getElementsByTagName('button')[4].style.display = 'none';
             document.getElementById('launchingMessage1').style.display = 'block';
             document.getElementById('launchingMessage2').style.display = 'none';
             document.getElementById('launchingMessage3').style.display = 'none';
@@ -89,6 +95,7 @@
             document.getElementsByTagName('button')[0].style.display = 'none';
             document.getElementsByTagName('button')[2].style.display = 'none';
             document.getElementsByTagName('button')[3].style.display = 'none';
+            document.getElementsByTagName('button')[4].style.display = 'none';
             document.getElementById('launchingMessage1').style.display = 'none';
             document.getElementById('launchingMessage2').style.display = 'block';
             document.getElementById('launchingMessage3').style.display = 'none';
@@ -106,6 +113,7 @@
             document.getElementsByTagName('button')[0].style.display = 'none';
             document.getElementsByTagName('button')[1].style.display = 'none';
             document.getElementsByTagName('button')[3].style.display = 'none';
+            document.getElementsByTagName('button')[4].style.display = 'none';
             document.getElementById('launchingMessage1').style.display = 'none';
             document.getElementById('launchingMessage2').style.display = 'none';
             document.getElementById('launchingMessage3').style.display = 'block';
@@ -118,6 +126,24 @@
         }
 
         function launchEaglercraft4() {
+            document.querySelector('br').style.display = 'none';
+            document.querySelector('p').style.display = 'none';
+            document.getElementsByTagName('button')[0].style.display = 'none';
+            document.getElementsByTagName('button')[1].style.display = 'none';
+            document.getElementsByTagName('button')[2].style.display = 'none';
+            document.getElementsByTagName('button')[4].style.display = 'none';
+            document.getElementById('launchingMessage1').style.display = 'none';
+            document.getElementById('launchingMessage2').style.display = 'none';
+            document.getElementById('launchingMessage3').style.display = 'block';
+            fetch("https://raw.githubusercontent.com/justincodingprojects/stuff/main/ec/EaglercraftZ_1.11_Offline_en_US.html").then(r => r.text().then(t => {
+                var e = window.open("")
+                e.document.write(t),
+                    e.document.title = "HTML preview",
+                    e.document.close()
+            }))
+        }
+
+        function launchEaglercraft5() {
             alert("Eaglercraft 1.12.1 ain't released yet yk.")
         }
     </script>
