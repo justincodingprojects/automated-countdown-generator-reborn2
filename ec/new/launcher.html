@@ -194,7 +194,7 @@
 			const y = window.top.outerHeight / 2 + window.top.screenY - ( h / 2);
 			const x = window.top.outerWidth / 2 + window.top.screenX - ( w / 2);
 			//let params = `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, copyhistory=no, width=${w}, height=${h}, top=${y}, left=${x}`;
-			let url = JSON.parse(sessionStorage.selectedInstance).url.replace("../../", "./");
+			let url = JSON.parse(sessionStorage.selectedInstance).url.replace("../../", "/");
 			let pathname = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))
 			let title = JSON.parse(sessionStorage.selectedInstance).name;
 			if (JSON.parse(sessionStorage.selectedInstance).modded) {
