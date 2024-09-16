@@ -207,7 +207,7 @@
 				goToPage('crash');
 			}
 			window.instanceWindow = open("", title/*, params*/);
-			fetch(url).then(r => r.text().then(t => {instanceWindow.document.write(t
+			fetch("." + url).then(r => r.text().then(t => {instanceWindow.document.write(t
 			.replaceAll('src="', 'src="' + window.origin + pathname + url)
 			.replaceAll('href="', 'href="' + window.origin + pathname + url)
 			.replaceAll('URI: "', 'URI: "' + window.origin + pathname)
