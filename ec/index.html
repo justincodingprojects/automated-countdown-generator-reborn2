@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Launch Eaglercraft</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background-color: black;
@@ -16,6 +17,27 @@
             color: white;
             font-family: 'Minecraft', sans-serif;
             text-shadow: 2px 2px 4px #000;
+        }
+
+        .topnav {
+            background-color: #34b518;
+            position: fixed;
+            top: 1.3%;
+            left: 0.5%;
+            right: 0.5%;
+            overflow: hidden;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            width: 100%;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-decoration: none;
+            font-size: 20px;
+            font-family: 'Roboto', sans-serif;
         }
 
         .container {
@@ -47,6 +69,7 @@
 </head>
 
 <body>
+    <div class="topnav" ><a id="mainbanner" class="active" onclick="newLauncherMessage">There will be a new launcher shortly...(click to learn more)</a></div>
     <div class="container">
         <button onclick="launchEaglercraft1()">Launch Eaglercraft 1.5.2</button>
         <div class="launching-message" id="launchingMessage1">Launching Eaglercraft 1.5.2...</div>
@@ -149,6 +172,17 @@
 
         function launchEaglercraft5() {
             alert("Eaglercraft 1.12.1 ain't released yet yk.")
+        }
+
+        function newLauncherMessage() {
+            Swal.fire({
+                title: "We got a new Launcher!",
+                html: 'Starting 9/16/2024 at 12:00 PM ET, we will transition to the new launcher located <a href="./new">here</a>. Hope you like it! :D',
+	            imageUrl: "./homepage.png",
+	            imageWidth: 400,
+                imageHeight: 225,
+                imageAlt: "Homepage of New Launcher"
+            });
         }
     </script>
 </body>
