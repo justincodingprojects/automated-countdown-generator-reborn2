@@ -151,7 +151,7 @@
         <hr>
         <div class="instancesList" id="vanilla"></div>
         <script>
-			if (!localStorage.instances) {
+			//if (!localStorage.instances) {
 				localStorage.instances = JSON.stringify([
                         {
 							"version":"1.11",
@@ -256,9 +256,9 @@
                             "disabled": false,
 						},
                         {
-							"version":"Funkin",
+							"version":"",
 							"versionID":"0.2.8",
-							"name":"Friday Night",
+							"name":"Friday Night Funkin",
 							"enabled": false,
 							"url": "../../games/FNF/",
                             "img": "../../games/FNF/icon.png",
@@ -267,7 +267,7 @@
 						}
 					]
 				)
-			}
+			//}
 
             let settings = JSON.parse(sessionStorage.settings);
 			if (settings.displayHacked === true) {
