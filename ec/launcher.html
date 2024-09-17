@@ -211,6 +211,7 @@
 			.replaceAll('src="', 'src="' + window.origin + pathname + url)
 			.replaceAll('href="', 'href="' + window.origin + pathname + url)
 			.replaceAll('URI: "', 'URI: "' + window.origin + pathname)
+			.replaceAll('gameUrl = ""', 'gameUrl = "' + window.origin + pathname + url + '"')
 		)
 		instanceWindow.document.close()
 	}))
