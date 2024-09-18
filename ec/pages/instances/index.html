@@ -151,7 +151,7 @@
         <hr>
         <div class="instancesList" id="vanilla"></div>
         <script>
-			if (!localStorage.instances && JSON.parse(localStorage.instances).length >= 12) {
+			//if (!localStorage.instances && JSON.parse(localStorage.instances).length >= 12) {
 				localStorage.instances = JSON.stringify([
                         {
 							"version":"1.11",
@@ -254,7 +254,7 @@
                             "img": "../../games/classic/icon.png",
                             "vanilla": true,
                             "disabled": false,
-						},
+						}/*,
                         {
 							"version":"",
 							"versionID":"0.2.8",
@@ -264,10 +264,10 @@
                             "img": "../../games/FNF/icon.png",
                             "vanilla": true,
                             "disabled": false,
-						}
+						}*/
 					]
 				)
-			}
+			//}
 
             let settings = JSON.parse(sessionStorage.settings);
 			if (settings.displayHacked === true) {
