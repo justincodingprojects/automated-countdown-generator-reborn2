@@ -4,13 +4,106 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.3] - 2024-05-14
+### Changed
+- Cleaned up some code in `PlayAnimationSongEvent.hx` (thanks BurgerBalls!)
+### Fixed
+- Fix Web Loading Bar (thanks lemz1!)
+- Don't allow any more inputs when exiting freeplay (thanks gamerbros!)
+- Fixed using mouse wheel to scroll on freeplay (thanks JugieNoob!)
+- Fixed the reset's of the health icons, score, and notes when re-entering gameplay from gameover (thanks ImCodist!)
+- Fixed the chart editor character selector's hitbox width (thanks MadBear422!)
+- Fixed camera stutter once a wipe transition to the Main Menu completes (thanks ImCodist!)
+- Fixed an issue where hold note would be invisible for a single frame (thanks ImCodist!)
+- Fix tween accumulation on title screen when pressing Y multiple times (thanks TheGaloXx!)
+- Fix for a game over easter egg so you don't accidentally exit it when viewing
+- Fix a crash when querying FlxG.state in the crash handler
+- Fix an issue where the Freeplay menu never displays 100% clear
+- Chart debug key now properly returns you to the previous chart editor session if you were playtesting a chart (thanks nebulazorua!)
+- Hopefully fixed Freeplay crashes on AMD gpu's
+
+## [0.3.2] - 2024-05-03
+### Added
+- Added `,` and `.` keybinds to the Chart Editor. These place Focus Camera events at the playhead, for the opponent and player respectively.
+- Implemented a blacklist to prevent mods from calling system functions.
+  - Added a couple utility functions to call useful stuff that got blacklisted.
+- Added an `onSongLoad` script event which allows for mutation of notes and events.
+- Added the current loaded modlist to crash logs.
+- Added the `visible` attribute to Level JSON data.
+- Enabled ZIP file system support for Polymod (make sure the metadata is in the root of the ZIP).
+### Changed
+- Songs in the mod folders will display in Freeplay without any extra scripting.
+- Story levels in the mod folders will display in Story without any extra scripting.
+- All audio should sound better in HTML5, less muddy
+### Fixed
+- Fixed a typo in the credits folder (`Custcene` -> `Cutscene`)
+- Fixed an issue where health icon transition animations would loop and never finish properly.
+- Fixed an issue where video cutscenes flagged as mid-song would crash the game when they finish.
+- Fixed an issue where some substate lifecycle events were not being dispatched.
+- Fixed a crash when trying to load into the Animation Offsets menu with an invalid character.
+- Fixed an issue where the preloader would spam the logs when it was complete and waiting for user input.
+- Should definitely have the fix for freeplay where it stops taking control of the main menu below it
+- Changed the code for the story menu difficulties so that "normal" doesn't overlap the arrows after leaving Weekend 1
+### Removed
+- Removed some unused `.txt` files in the `assets/data` folder.
+
+## [0.3.1] - 2024-05-01
+### Changed
+- Ensure the Git commit hash always displays in the log files.
+- Added whether the local Git repo was modified to the log files.
+- Removed "PROTOTYPE" text on release builds only (it still shows on debug builds).
+- Added additional credits and special thanks.
+- Updated peepo in creds to peepo173
+### Fixed
+- Fix a crash when retrieving system specs while handing a crash.
+- Fix a crash triggered when pausing before the song started.
+- Fix a crash triggered when dying before the song started.
+- Fix a crash triggered when unloading certain graphics.
+- Pico game over confirm plays correctly
+- When exiting from a song into freeplay, main menu no longer takes inputs unintentionally (aka issues with merch links opening up when selecting songs)
+- Fix for arrow keys causing web browser page scroll
+
+## [0.3.0] - 2024-04-30
+### Added
+- New Story Level: Weekend 1, starting Pico, Darnell, and Nene.
+  - Beat the level in Story Mode to unlock the songs for Freeplay!
+- 12 new Erect remixes, featuring Kawai Sprite, Saruky, Kohta Takahashi, and Saster
+  - Unlocked instantly in Freeplay
+- New visually enhanced Freeplay menu.
+  - Sorting, favorites, and more.
+- New Results screen upon completing any song or story level.
+- New refactored Chart Editor prototype (accessible via `~` in the main menu or `7` in the Play State, rebindable). (VERY EARLY PROTOTYPE. EXPECT BUGS AND CRASHES)
+- Implemented a new scripting system using HScript (an interpreted language with Haxe-like syntax) for incredible flexibility.
+  - All character-specific, stage-specific, or song-specific behaviors have been moved to HScript.
+- New song events system allows for simple customization of camera behavior.
+  - Mods can implement custom song events via HScript, and new built-in song events will come in the future.
+- New credits menu to list all the dozens of people who contributed.
+### Changed
+- Completely refactored the game's input system for higher reliability and accuracy.
+- Reworked note rendering to massively reduce lag on larger charts.
+- Reworks to scoring and health gain.
+- Dedicated gamepad support with the ability to rebind buttons.
+- Improvements to video cutscenes and dialogue, allowing them to be easily skipped or restarted.
+- Updated Polymod by several major versions, allowing for fully dynamic asset replacement and support for scripted classes.
+- Completely refactored almost every part of the game's code for performance, stability, and extensibility.
+  - This is not the Ludem Dare game held together with sticks and glue you played three years ago.
+- Characters, stages, songs, story levels, and dialogue are now built from JSON data registries rather than being hardcoded.
+  - All of these also support attaching scripts for custom behavior, more documentation on this soon.
+  - You can forcibly reload the game's JSON data and scripts by pressing F5.
+- Fully refactored the game's chart file format for extensibility and readability.
+  - You can migrate old charts using the Import FNF Legacy option in the chart editor.
+- Various visual tweaks and improvements.
+### Fixed
+- 17 quadrillion bugs across hundreds of PRs.
+
+## [0.2.8] - 2021-04-18 (note, this one is iffy cuz we slacked wit it lol!)
 ### Added
 - TANKMAN! 3 NEW SONGS BY KAWAISPRITE (UGH, GUNS, STRESS)! Charting help by MtH!
 - Monster added into week 2, FINALLY (Charting help by MtH and ChaoticGamer!)
 - Can now change song difficulty mid-game.
 - Shows some song info on pause screen.
 - Cute little icons onto freeplay menu
+- Offset files for easier modification of characters
 ### Changed
 - ASSET LOADING OVERHAUL, WAY FASTER LOAD TIMES ON WEB!!! (THANKS TO GEOKURELI WOKE KING)
 - Made difficulty selector on freeplay menu more apparent
@@ -22,7 +115,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Easter eggs
 - readme's in desktop versions of the game
 ### Changed
-
 - New icons, old one was placeholder since October woops!
 - Made the transitions between the story mode levels more seamless.
 - Offset of the Newgrounds logo on boot screen.
@@ -76,7 +168,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clear section button to note editor
 - Swap button in note editor
 - a new boot text or two
-- automatic check for when you're on an old version of the game! 
+- automatic check for when you're on an old version of the game!
 ### Changed
 - Made Spookeez on Normal easier.
 - Mouse is now visible in note editor
